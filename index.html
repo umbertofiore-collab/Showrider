@@ -725,24 +725,24 @@ const DOC_LABELS = {
 };
 
 const DEFAULT_CHECKLIST = [
-  {id:'c1', cat:'🎭 Palco', label:'Palco pulito e pronto', done:false},
-  {id:'c2', cat:'🎭 Palco', label:'Quinte e fondale montati', done:false},
-  {id:'c3', cat:'🎭 Palco', label:'Praticabili e set montati', done:false},
-  {id:'c4', cat:'🎭 Palco', label:'Pavimento controllato', done:false},
-  {id:'c5', cat:'🔊 Audio', label:'Impianto audio acceso e testato', done:false},
-  {id:'c6', cat:'🔊 Audio', label:'Microfoni controllati e assegnati', done:false},
-  {id:'c7', cat:'🔊 Audio', label:'Monitor e IEM funzionanti', done:false},
-  {id:'c8', cat:'🔊 Audio', label:'Soundcheck completato', done:false},
-  {id:'c9', cat:'💡 Luci', label:'Console luci accesa e patchata', done:false},
-  {id:'c10', cat:'💡 Luci', label:'General check apparecchi', done:false},
-  {id:'c11', cat:'💡 Luci', label:'Focus completato', done:false},
-  {id:'c12', cat:'💡 Luci', label:'Cue list caricata e testata', done:false},
-  {id:'c13', cat:'🎬 Video', label:'Proiettori accesi e allineati', done:false},
-  {id:'c14', cat:'🎬 Video', label:'Contenuti video testati', done:false},
-  {id:'c15', cat:'👥 Personale', label:'Crew tecnica tutta presente', done:false},
-  {id:'c16', cat:'👥 Personale', label:'Artisti in camerino', done:false},
-  {id:'c17', cat:'📋 Admin', label:'Documentazione SIAE consegnata', done:false},
-  {id:'c18', cat:'📋 Admin', label:'Contatti venue verificati', done:false},
+  {id:'c1', cat:'Palco', label:'Palco pulito e pronto', done:false},
+  {id:'c2', cat:'Palco', label:'Quinte e fondale montati', done:false},
+  {id:'c3', cat:'Palco', label:'Praticabili e set montati', done:false},
+  {id:'c4', cat:'Palco', label:'Pavimento controllato', done:false},
+  {id:'c5', cat:'Audio', label:'Impianto audio acceso e testato', done:false},
+  {id:'c6', cat:'Audio', label:'Microfoni controllati e assegnati', done:false},
+  {id:'c7', cat:'Audio', label:'Monitor e IEM funzionanti', done:false},
+  {id:'c8', cat:'Audio', label:'Soundcheck completato', done:false},
+  {id:'c9', cat:'Luci', label:'Console luci accesa e patchata', done:false},
+  {id:'c10', cat:'Luci', label:'General check apparecchi', done:false},
+  {id:'c11', cat:'Luci', label:'Focus completato', done:false},
+  {id:'c12', cat:'Luci', label:'Cue list caricata e testata', done:false},
+  {id:'c13', cat:'Video', label:'Proiettori accesi e allineati', done:false},
+  {id:'c14', cat:'Video', label:'Contenuti video testati', done:false},
+  {id:'c15', cat:'Personale', label:'Crew tecnica tutta presente', done:false},
+  {id:'c16', cat:'Personale', label:'Artisti in camerino', done:false},
+  {id:'c17', cat:'Admin', label:'Documentazione SIAE consegnata', done:false},
+  {id:'c18', cat:'Admin', label:'Contatti venue verificati', done:false},
   {id:'c19', cat:'🚀 Show', label:'Prova generale completata', done:false},
   {id:'c20', cat:'🚀 Show', label:'VIA! — Apertura pubblico', done:false}
 ];
@@ -893,8 +893,8 @@ const STRINGS = {
     ctLogistica:'Logistica e ospitalità', ctDocumenti:'Documenti richiesti', ctChecklist:'Checklist pre-show',
     btnChiama:'Chiama', btnAddCrono:'+ Aggiungi voce', btnAddRuolo:'+ Aggiungi ruolo',
     spPillRepliche:'Repliche', spPillCapienza:'Capienza',
-    chkCat_palco:'🎭 Palco', chkCat_audio:'🔊 Audio', chkCat_luci:'💡 Luci',
-    chkCat_video:'🎬 Video', chkCat_personale:'👥 Personale', chkCat_admin:'📋 Admin', chkCat_show:'🚀 Show',
+    chkCat_palco:'Palco', chkCat_audio:'Audio', chkCat_luci:'Luci',
+    chkCat_video:'Video', chkCat_personale:'Personale', chkCat_admin:'Admin', chkCat_show:'🚀 Show',
     chkItem_c1:'Palco pulito e pronto', chkItem_c2:'Quinte e fondale montati',
     chkItem_c3:'Praticabili e set montati', chkItem_c4:'Pavimento controllato',
     chkItem_c5:'Impianto audio acceso e testato', chkItem_c6:'Microfoni controllati e assegnati',
@@ -953,8 +953,8 @@ const STRINGS = {
     ctLogistica:'Logistics & hospitality', ctDocumenti:'Required documents', ctChecklist:'Pre-show checklist',
     btnChiama:'Call', btnAddCrono:'+ Add entry', btnAddRuolo:'+ Add role',
     spPillRepliche:'Shows', spPillCapienza:'Capacity',
-    chkCat_palco:'🎭 Stage', chkCat_audio:'🔊 Audio', chkCat_luci:'💡 Lights',
-    chkCat_video:'🎬 Video', chkCat_personale:'👥 Crew', chkCat_admin:'📋 Admin', chkCat_show:'🚀 Show',
+    chkCat_palco:'🎭 Stage', chkCat_audio:'Audio', chkCat_luci:'💡 Lights',
+    chkCat_video:'Video', chkCat_personale:'👥 Crew', chkCat_admin:'Admin', chkCat_show:'🚀 Show',
     chkItem_c1:'Stage clean and ready', chkItem_c2:'Wings and backdrop rigged',
     chkItem_c3:'Platforms and set built', chkItem_c4:'Floor checked',
     chkItem_c5:'PA system on and tested', chkItem_c6:'Microphones checked and assigned',
@@ -1422,7 +1422,7 @@ function renderChecklist() {
       const div = document.createElement('div');
       div.className = 'chk-item' + (item.done ? ' done' : '');
       div.innerHTML = `<div class="chk-box">${item.done ? '✓' : ''}</div><span class="chk-label">${esc((()=>{const k='chkItem_'+item.id;const s=STRINGS[currentLang]||STRINGS.it;return s[k]!==undefined?s[k]:item.label;})())}</span><button class="chk-del" onclick="event.stopPropagation();deleteChkItem('${item.id}')" title="Rimuovi">✕</button>`;
-      div.onclick = () => toggleChkItem(item.id);
+      div.querySelector('.chk-box').onclick = (e) => { e.stopPropagation(); toggleChkItem(item.id); };
       itemsDiv.appendChild(div);
     });
     section.appendChild(itemsDiv);
@@ -1444,10 +1444,11 @@ function resetChecklist() {
   renderChecklist(); autoSave(); toast(t('chkReset2'));
 }
 function addCustomChkItem() {
+  if (!data.checklist) data.checklist = JSON.parse(JSON.stringify(DEFAULT_CHECKLIST));
   const input = document.getElementById('chkNewItem');
   const label = input.value.trim();
   if (!label) return;
-  data.checklist.push({ id: 'c_' + Date.now(), label, cat:'📝 Personalizzati', done:false });
+  data.checklist.push({ id: 'c_' + Date.now(), label, cat:'Personalizzati', done:false });
   input.value = ''; renderChecklist(); autoSave();
 }
 
