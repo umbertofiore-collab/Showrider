@@ -1420,7 +1420,7 @@ function renderChecklist() {
     items.forEach(item => {
       const div = document.createElement('div');
       div.className = 'chk-item' + (item.done ? ' done' : '');
-      div.innerHTML = `<div class="chk-box">${item.done ? '✓' : ''}</div><span class="chk-label">${esc((()=>{const k='chkItem_'+item.id;const s=STRINGS[currentLang]||STRINGS.it;return s[k]!==undefined?s[k]:item.label;})()}</span><button class="chk-del" onclick="event.stopPropagation();deleteChkItem('${item.id}')" title="Rimuovi">✕</button>`;
+      div.innerHTML = `<div class="chk-box">${item.done ? '✓' : ''}</div><span class="chk-label">${esc((()=>{const k='chkItem_'+item.id;const s=STRINGS[currentLang]||STRINGS.it;return s[k]!==undefined?s[k]:item.label;})())}</span><button class="chk-del" onclick="event.stopPropagation();deleteChkItem('${item.id}')" title="Rimuovi">✕</button>`;
       div.onclick = () => toggleChkItem(item.id);
       itemsDiv.appendChild(div);
     });
