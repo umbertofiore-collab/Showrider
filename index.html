@@ -1268,15 +1268,19 @@ function showQR() {
   const tel = data.venueContTel || data.refTecTel || '';
   const email = data.venueContEmail || data.refTecEmail || '';
   // testo breve: solo i dati essenziali, senza caratteri speciali
+  // vCard — viene riconosciuta come contatto da tutti gli scanner QR
+  const refNome = data.refTecNome || data.venueContNome || '';
+  const note = ['ShowRider', titolo, data.compagnia || '', venue ? 'Venue: '+venue : '', dataShow ? 'Data: '+dataShow : ''].filter(Boolean).join(' | ');
   const qrText = [
-    'ShowRider',
-    titolo,
-    data.compagnia || '',
-    'Venue: ' + venue,
-    'Data: ' + dataShow,
-    tel ? 'Tel: ' + tel : '',
-    email ? 'Email: ' + email : '',
-    'Stato: ' + (data.stato || 'bozza')
+    'BEGIN:VCARD',
+    'VERSION:3.0',
+    'FN:' + (titolo || 'ShowRider'),
+    refNome ? 'N:' + refNome + ';;;' : '',
+    data.compagnia ? 'ORG:' + data.compagnia : '',
+    tel ? 'TEL;TYPE=WORK,VOICE:' + tel : '',
+    email ? 'EMAIL;TYPE=WORK:' + email : '',
+    'NOTE:' + note,
+    'END:VCARD'
   ].filter(Boolean).join('\n');
 
   document.getElementById('qrShowTitle').textContent = titolo;
