@@ -893,6 +893,18 @@ const STRINGS = {
     ctLogistica:'Logistica e ospitalità', ctDocumenti:'Documenti richiesti', ctChecklist:'Checklist pre-show',
     btnChiama:'Chiama', btnAddCrono:'+ Aggiungi voce', btnAddRuolo:'+ Aggiungi ruolo',
     spPillRepliche:'Repliche', spPillCapienza:'Capienza',
+    chkCat_palco:'🎭 Palco', chkCat_audio:'🔊 Audio', chkCat_luci:'💡 Luci',
+    chkCat_video:'🎬 Video', chkCat_personale:'👥 Personale', chkCat_admin:'📋 Admin', chkCat_show:'🚀 Show',
+    chkItem_c1:'Palco pulito e pronto', chkItem_c2:'Quinte e fondale montati',
+    chkItem_c3:'Praticabili e set montati', chkItem_c4:'Pavimento controllato',
+    chkItem_c5:'Impianto audio acceso e testato', chkItem_c6:'Microfoni controllati e assegnati',
+    chkItem_c7:'Monitor e IEM funzionanti', chkItem_c8:'Soundcheck completato',
+    chkItem_c9:'Console luci accesa e patchata', chkItem_c10:'General check apparecchi',
+    chkItem_c11:'Focus completato', chkItem_c12:'Cue list caricata e testata',
+    chkItem_c13:'Proiettori accesi e allineati', chkItem_c14:'Contenuti video testati',
+    chkItem_c15:'Crew tecnica tutta presente', chkItem_c16:'Artisti in camerino',
+    chkItem_c17:'Documentazione SIAE consegnata', chkItem_c18:'Contatti venue verificati',
+    chkItem_c19:'Prova generale completata', chkItem_c20:'VIA! — Apertura pubblico',
   },
   en: {
     tab0:'Info', tab1:'Schedule', tab2:'Stage', tab3:'Audio', tab4:'Lights',
@@ -941,6 +953,18 @@ const STRINGS = {
     ctLogistica:'Logistics & hospitality', ctDocumenti:'Required documents', ctChecklist:'Pre-show checklist',
     btnChiama:'Call', btnAddCrono:'+ Add entry', btnAddRuolo:'+ Add role',
     spPillRepliche:'Shows', spPillCapienza:'Capacity',
+    chkCat_palco:'🎭 Stage', chkCat_audio:'🔊 Audio', chkCat_luci:'💡 Lights',
+    chkCat_video:'🎬 Video', chkCat_personale:'👥 Crew', chkCat_admin:'📋 Admin', chkCat_show:'🚀 Show',
+    chkItem_c1:'Stage clean and ready', chkItem_c2:'Wings and backdrop rigged',
+    chkItem_c3:'Platforms and set built', chkItem_c4:'Floor checked',
+    chkItem_c5:'PA system on and tested', chkItem_c6:'Microphones checked and assigned',
+    chkItem_c7:'Monitors and IEMs working', chkItem_c8:'Soundcheck done',
+    chkItem_c9:'Lighting console on and patched', chkItem_c10:'General fixture check',
+    chkItem_c11:'Focus complete', chkItem_c12:'Cue list loaded and tested',
+    chkItem_c13:'Projectors on and aligned', chkItem_c14:'Video content tested',
+    chkItem_c15:'Full tech crew on site', chkItem_c16:'Artists in dressing rooms',
+    chkItem_c17:'SIAE paperwork delivered', chkItem_c18:'Venue contacts verified',
+    chkItem_c19:'General rehearsal done', chkItem_c20:'GO! — Doors open',
   }
 };
 
@@ -957,7 +981,8 @@ function applyLang() {
     const span = el.querySelector('span.tab-txt');
     if (span) span.textContent = ' ' + t('tab' + i);
   });
-  const srch = document.getElementById('headerSearch');
+  updateUnitsBtn();
+  if(currentView==="editor")renderChecklist();
   if (srch) srch.placeholder = t('libSearch');
   document.querySelectorAll('[data-t]').forEach(el => {
     el.textContent = t(el.getAttribute('data-t'));
@@ -1388,14 +1413,14 @@ function renderChecklist() {
     section.className = 'chk-category';
     const titleDiv = document.createElement('div');
     titleDiv.className = 'chk-cat-title';
-    titleDiv.textContent = cat;
+    const ck='chkCat_'+cat.replace(/[^\w]/g,'').toLowerCase(); titleDiv.textContent=(t(ck)!==ck)?t(ck):cat;
     section.appendChild(titleDiv);
     const itemsDiv = document.createElement('div');
     itemsDiv.className = 'chk-items';
     items.forEach(item => {
       const div = document.createElement('div');
       div.className = 'chk-item' + (item.done ? ' done' : '');
-      div.innerHTML = `<div class="chk-box">${item.done ? '✓' : ''}</div><span class="chk-label">${esc(item.label)}</span><button class="chk-del" onclick="event.stopPropagation();deleteChkItem('${item.id}')" title="Rimuovi">✕</button>`;
+      div.innerHTML = `<div class="chk-box">${item.done ? '✓' : ''}</div><span class="chk-label">${esc((()=>{const k='chkItem_'+item.id;const s=STRINGS[currentLang]||STRINGS.it;return s[k]!==undefined?s[k]:item.label;})()}</span><button class="chk-del" onclick="event.stopPropagation();deleteChkItem('${item.id}')" title="Rimuovi">✕</button>`;
       div.onclick = () => toggleChkItem(item.id);
       itemsDiv.appendChild(div);
     });
