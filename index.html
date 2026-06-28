@@ -433,24 +433,24 @@ header button, header select, header input, header a, header .btn {
   <div class="summary-bar">
     <div class="summary-pill" onclick="focusField('venue')"><div class="sp-label">Venue</div><div class="sp-val" id="spVenue">—</div></div>
     <div class="summary-pill" onclick="focusField('data')"><div class="sp-label">Data</div><div class="sp-val" id="spData">—</div></div>
-    <div class="summary-pill" onclick="focusField('repliche')"><div class="sp-label">Repliche</div><div class="sp-val" id="spRepliche">—</div></div>
-    <div class="summary-pill" onclick="focusField('capienza')"><div class="sp-label">Capienza</div><div class="sp-val" id="spCapienza">—</div></div>
+    <div class="summary-pill" onclick="focusField('repliche')"><div class="sp-label" data-t="spPillRepliche">Repliche</div><div class="sp-val" id="spRepliche">—</div></div>
+    <div class="summary-pill" onclick="focusField('capienza')"><div class="sp-label" data-t="spPillCapienza">Capienza</div><div class="sp-val" id="spCapienza">—</div></div>
   </div>
 
   <div class="card">
-    <div class="card-header"><div class="card-title"><i data-lucide="clapperboard"></i> Spettacolo</div></div>
+    <div class="card-header"><div class="card-title"><i data-lucide="clapperboard"></i> <span data-t="ctSpettacolo">Spettacolo</span></div></div>
     <div class="card-body">
       <div class="grid g2">
-        <div class="field span2"><label>Titolo spettacolo</label><input type="text" id="titolo" oninput="autoSave()" placeholder="Es. Il nome della rosa"></div>
-        <div class="field"><label>Compagnia</label><input type="text" id="compagnia" oninput="autoSave()" placeholder="Nome compagnia"></div>
-        <div class="field"><label>Genere</label>
+        <div class="field span2"><label data-t="lTitolo">Titolo spettacolo</label><input type="text" id="titolo" oninput="autoSave()" placeholder="Es. Il nome della rosa"></div>
+        <div class="field"><label data-t="lCompagnia">Compagnia</label><input type="text" id="compagnia" oninput="autoSave()" placeholder="Nome compagnia"></div>
+        <div class="field"><label data-t="lGenere">Genere</label>
           <select id="genere" onchange="autoSave()">
             <option>Teatro</option><option>Danza</option><option>Musica</option>
             <option>Opera</option><option>Circo</option><option>Multimediale</option><option>Altro</option>
           </select>
         </div>
-        <div class="field"><label>Durata spettacolo</label><input type="text" id="durata" oninput="autoSave()" placeholder="Es. 90 min + 15 intervallo"></div>
-        <div class="field"><label>N° repliche</label><input type="number" id="repliche" oninput="autoSave()" placeholder="1" min="1"></div>
+        <div class="field"><label data-t="lDurata">Durata spettacolo</label><input type="text" id="durata" oninput="autoSave()" placeholder="Es. 90 min + 15 intervallo"></div>
+        <div class="field"><label data-t="lRepliche">N° repliche</label><input type="number" id="repliche" oninput="autoSave()" placeholder="1" min="1"></div>
       </div>
     </div>
   </div>
@@ -459,46 +459,46 @@ header button, header select, header input, header a, header .btn {
     <div class="card-header"><div class="card-title"><i data-lucide="map-pin"></i> Venue</div></div>
     <div class="card-body">
       <div class="grid g2">
-        <div class="field"><label>Data</label><input type="date" id="data" oninput="autoSave()"></div>
-        <div class="field"><label>Venue / Teatro</label>
+        <div class="field"><label data-t="lData">Data</label><input type="date" id="data" oninput="autoSave()"></div>
+        <div class="field"><label data-t="lVenue">Venue / Teatro</label>
           <input type="text" id="venue" oninput="autoSave()" placeholder="Es. Teatro Grande" autocomplete="off">
         </div>
-        <div class="field"><label>Capienza</label><input type="text" id="capienza" oninput="autoSave()" placeholder="Es. 300 posti"></div>
+        <div class="field"><label data-t="lCapienza">Capienza</label><input type="text" id="capienza" oninput="autoSave()" placeholder="Es. 300 posti"></div>
       </div>
     </div>
   </div>
 
   <div class="card">
-    <div class="card-header"><div class="card-title"><i data-lucide="building-2"></i> Contatti Venue</div></div>
+    <div class="card-header"><div class="card-title"><i data-lucide="building-2"></i> <span data-t="ctContattiVenue">Contatti Venue</span></div></div>
     <div class="card-body">
       <div class="grid g3">
-        <div class="field"><label>Dir. Tecnico Venue</label><input type="text" id="venueContNome" oninput="autoSave()" placeholder="Nome e cognome"></div>
-        <div class="field"><label>Tel Venue</label><input type="tel" id="venueContTel" oninput="autoSave()" placeholder="+39 …"></div>
-        <div class="field"><label>Email Venue</label><input type="email" id="venueContEmail" oninput="autoSave()" placeholder="email@teatro.it"></div>
+        <div class="field"><label data-t="lVenueDir">Dir. Tecnico Venue</label><input type="text" id="venueContNome" oninput="autoSave()" placeholder="Nome e cognome"></div>
+        <div class="field"><label data-t="lVenueTel">Tel Venue</label><input type="tel" id="venueContTel" oninput="autoSave()" placeholder="+39 …"></div>
+        <div class="field"><label data-t="lVenueEmail">Email Venue</label><input type="email" id="venueContEmail" oninput="autoSave()" placeholder="email@teatro.it"></div>
       </div>
       <div class="contact-btns">
-        <button class="btn btn-ghost btn-sm" onclick="callVenue()"><i data-lucide="phone"></i> Chiama</button>
+        <button class="btn btn-ghost btn-sm" onclick="callVenue()"><i data-lucide="phone"></i> <span data-t="btnChiama">Chiama</span></button>
         <button class="btn btn-ghost btn-sm" onclick="emailVenue()"><i data-lucide="mail"></i> Email</button>
       </div>
     </div>
   </div>
 
   <div class="card">
-    <div class="card-header"><div class="card-title"><i data-lucide="contact"></i> Referenti Compagnia</div></div>
+    <div class="card-header"><div class="card-title"><i data-lucide="contact"></i> <span data-t="ctReferenti">Referenti Compagnia</span></div></div>
     <div class="card-body">
       <div class="grid g3">
-        <div class="field"><label>Ref. Compagnia — Nome</label><input type="text" id="refCompNome" oninput="autoSave()" placeholder="Nome e cognome"></div>
-        <div class="field"><label>Ref. Compagnia — Tel</label><input type="tel" id="refCompTel" oninput="autoSave()" placeholder="+39 …"></div>
-        <div class="field"><label>Ref. Compagnia — Email</label><input type="email" id="refCompEmail" oninput="autoSave()" placeholder="email@…"></div>
-        <div class="field"><label>Ref. Tecnico — Nome</label><input type="text" id="refTecNome" oninput="autoSave()" placeholder="Nome e cognome"></div>
-        <div class="field"><label>Ref. Tecnico — Tel</label><input type="tel" id="refTecTel" oninput="autoSave()" placeholder="+39 …"></div>
-        <div class="field"><label>Ref. Tecnico — Email</label><input type="email" id="refTecEmail" oninput="autoSave()" placeholder="email@…"></div>
+        <div class="field"><label data-t="lRefCompNome">Ref. Compagnia — Nome</label><input type="text" id="refCompNome" oninput="autoSave()" placeholder="Nome e cognome"></div>
+        <div class="field"><label data-t="lRefCompTel">Ref. Compagnia — Tel</label><input type="tel" id="refCompTel" oninput="autoSave()" placeholder="+39 …"></div>
+        <div class="field"><label data-t="lRefCompEmail">Ref. Compagnia — Email</label><input type="email" id="refCompEmail" oninput="autoSave()" placeholder="email@…"></div>
+        <div class="field"><label data-t="lRefTecNome">Ref. Tecnico — Nome</label><input type="text" id="refTecNome" oninput="autoSave()" placeholder="Nome e cognome"></div>
+        <div class="field"><label data-t="lRefTecTel">Ref. Tecnico — Tel</label><input type="tel" id="refTecTel" oninput="autoSave()" placeholder="+39 …"></div>
+        <div class="field"><label data-t="lRefTecEmail">Ref. Tecnico — Email</label><input type="email" id="refTecEmail" oninput="autoSave()" placeholder="email@…"></div>
       </div>
     </div>
   </div>
 
   <div class="card">
-    <div class="card-header"><div class="card-title"><i data-lucide="sticky-note"></i> Note generali</div></div>
+    <div class="card-header"><div class="card-title"><i data-lucide="sticky-note"></i> <span data-t="ctNoteGenerali">Note generali</span></div></div>
     <div class="card-body">
       <div class="field"><textarea id="noteGenerali" oninput="autoSave()" placeholder="Note aggiuntive, richieste speciali…" style="min-height:100px"></textarea></div>
     </div>
@@ -509,8 +509,8 @@ header button, header select, header input, header a, header .btn {
 <div class="panel" id="panel1" data-print-label="Cronoprogramma">
   <div class="card">
     <div class="card-header">
-      <div class="card-title"><i data-lucide="clock-4"></i> Cronoprogramma giornata</div>
-      <button class="btn btn-ghost btn-sm" onclick="addCronoRow()">+ Aggiungi voce</button>
+      <div class="card-title"><i data-lucide="clock-4"></i> <span data-t="ctCrono">Cronoprogramma giornata</span></div>
+      <button class="btn btn-ghost btn-sm" onclick="addCronoRow()"><span data-t="btnAddCrono">+ Aggiungi voce</span></button>
     </div>
     <div class="card-body" style="padding:0">
       <table class="crono-table">
@@ -524,7 +524,7 @@ header button, header select, header input, header a, header .btn {
 <!-- ── TAB 2: PALCO ── -->
 <div class="panel" id="panel2" data-print-label="Palco">
   <div class="card">
-    <div class="card-header"><div class="card-title"><i data-lucide="ruler"></i> Dimensioni palco</div></div>
+    <div class="card-header"><div class="card-title"><i data-lucide="ruler"></i> <span data-t="ctDimPalco">Dimensioni palco</span></div></div>
     <div class="card-body">
       <div class="grid g4">
         <div class="field"><label>Larghezza (m)</label><input type="text" id="palcoLarg" oninput="autoSave()" placeholder="es. 12"></div>
@@ -535,14 +535,14 @@ header button, header select, header input, header a, header .btn {
     </div>
   </div>
   <div class="card">
-    <div class="card-header"><div class="card-title"><i data-lucide="layout-template"></i> Dotazioni palco</div></div>
+    <div class="card-header"><div class="card-title"><i data-lucide="layout-template"></i> <span data-t="ctDotPalco">Dotazioni palco</span></div></div>
     <div class="card-body">
       <div class="grid g2">
-        <div class="field"><label>Pavimento</label><input type="text" id="pavimento" oninput="autoSave()" placeholder="es. Linoleum nero"></div>
-        <div class="field"><label>Quinte</label><input type="text" id="quinte" oninput="autoSave()" placeholder="es. 4 coppie velluto nero"></div>
-        <div class="field"><label>Fondale</label><input type="text" id="fondale" oninput="autoSave()" placeholder="es. Cyclorama bianco"></div>
-        <div class="field"><label>Camerini</label><input type="text" id="camerini" oninput="autoSave()" placeholder="es. 3 camerini individuali"></div>
-        <div class="field span2"><label>Note palco</label><textarea id="palcoNote" oninput="autoSave()" placeholder="Note aggiuntive sul palco…"></textarea></div>
+        <div class="field"><label data-t="lPavimento">Pavimento</label><input type="text" id="pavimento" oninput="autoSave()" placeholder="es. Linoleum nero"></div>
+        <div class="field"><label data-t="lQuinte">Quinte</label><input type="text" id="quinte" oninput="autoSave()" placeholder="es. 4 coppie velluto nero"></div>
+        <div class="field"><label data-t="lFondale">Fondale</label><input type="text" id="fondale" oninput="autoSave()" placeholder="es. Cyclorama bianco"></div>
+        <div class="field"><label data-t="lCamerini">Camerini</label><input type="text" id="camerini" oninput="autoSave()" placeholder="es. 3 camerini individuali"></div>
+        <div class="field span2"><label data-t="lNotePalco">Note palco</label><textarea id="palcoNote" oninput="autoSave()" placeholder="Note aggiuntive sul palco…"></textarea></div>
       </div>
     </div>
   </div>
@@ -551,25 +551,25 @@ header button, header select, header input, header a, header .btn {
 <!-- ── TAB 3: AUDIO ── -->
 <div class="panel" id="panel3" data-print-label="Audio">
   <div class="card">
-    <div class="card-header"><div class="card-title"><i data-lucide="volume-2"></i> Impianto audio</div></div>
+    <div class="card-header"><div class="card-title"><i data-lucide="volume-2"></i> <span data-t="ctAudio">Impianto audio</span></div></div>
     <div class="card-body">
       <div class="grid g2">
-        <div class="field"><label>Impianto principale</label><input type="text" id="audioImpianto" oninput="autoSave()" placeholder="es. L-Acoustics KARA"></div>
-        <div class="field"><label>Mixer FOH</label><input type="text" id="audioMixer" oninput="autoSave()" placeholder="es. DiGiCo SD12"></div>
-        <div class="field"><label>Canali / I/O</label><input type="text" id="audioCanali" oninput="autoSave()" placeholder="es. 48 in / 24 out"></div>
-        <div class="field"><label>Monitor / wedge</label><input type="text" id="audioMonitor" oninput="autoSave()" placeholder="es. 6 × d&b M4"></div>
-        <div class="field span2"><label>Backline / strumenti</label><input type="text" id="backline" oninput="autoSave()" placeholder="es. Pianoforte Yamaha C3"></div>
+        <div class="field"><label data-t="lAudioImpianto">Impianto principale</label><input type="text" id="audioImpianto" oninput="autoSave()" placeholder="es. L-Acoustics KARA"></div>
+        <div class="field"><label data-t="lMixer">Mixer FOH</label><input type="text" id="audioMixer" oninput="autoSave()" placeholder="es. DiGiCo SD12"></div>
+        <div class="field"><label data-t="lCanali">Canali / I/O</label><input type="text" id="audioCanali" oninput="autoSave()" placeholder="es. 48 in / 24 out"></div>
+        <div class="field"><label data-t="lMonitor">Monitor / wedge</label><input type="text" id="audioMonitor" oninput="autoSave()" placeholder="es. 6 × d&b M4"></div>
+        <div class="field span2"><label data-t="lBackline">Backline / strumenti</label><input type="text" id="backline" oninput="autoSave()" placeholder="es. Pianoforte Yamaha C3"></div>
       </div>
     </div>
   </div>
   <div class="card">
-    <div class="card-header"><div class="card-title"><i data-lucide="mic"></i> Microfoni richiesti</div></div>
+    <div class="card-header"><div class="card-title"><i data-lucide="mic"></i> <span data-t="ctMicrofoni">Microfoni richiesti</span></div></div>
     <div class="card-body">
       <div class="chips" id="micChips"></div>
     </div>
   </div>
   <div class="card">
-    <div class="card-header"><div class="card-title"><i data-lucide="file-text"></i> Note audio</div></div>
+    <div class="card-header"><div class="card-title"><i data-lucide="file-text"></i> <span data-t="ctNoteAudio">Note audio</span></div></div>
     <div class="card-body">
       <div class="field"><textarea id="audioNote" oninput="autoSave()" placeholder="Requisiti speciali, patch list, note audio…"></textarea></div>
     </div>
@@ -579,23 +579,23 @@ header button, header select, header input, header a, header .btn {
 <!-- ── TAB 4: LUCI ── -->
 <div class="panel" id="panel4" data-print-label="Luci">
   <div class="card">
-    <div class="card-header"><div class="card-title"><i data-lucide="lightbulb"></i> Impianto luci</div></div>
+    <div class="card-header"><div class="card-title"><i data-lucide="lightbulb"></i> <span data-t="ctLuci">Impianto luci</span></div></div>
     <div class="card-body">
       <div class="grid g2">
-        <div class="field"><label>Console luci</label><input type="text" id="luciConsole" oninput="autoSave()" placeholder="es. GrandMA3 Light"></div>
-        <div class="field"><label>Dimmer / canali DMX</label><input type="text" id="luciDimmer" oninput="autoSave()" placeholder="es. 96 canali DMX"></div>
-        <div class="field span2"><label>Effetti speciali</label><input type="text" id="luciEffetti" oninput="autoSave()" placeholder="es. Hazer, strobo, UV"></div>
+        <div class="field"><label data-t="lLuciConsole">Console luci</label><input type="text" id="luciConsole" oninput="autoSave()" placeholder="es. GrandMA3 Light"></div>
+        <div class="field"><label data-t="lDimmer">Dimmer / canali DMX</label><input type="text" id="luciDimmer" oninput="autoSave()" placeholder="es. 96 canali DMX"></div>
+        <div class="field span2"><label data-t="lEffetti">Effetti speciali</label><input type="text" id="luciEffetti" oninput="autoSave()" placeholder="es. Hazer, strobo, UV"></div>
       </div>
     </div>
   </div>
   <div class="card">
-    <div class="card-header"><div class="card-title"><i data-lucide="zap"></i> Apparecchi richiesti</div></div>
+    <div class="card-header"><div class="card-title"><i data-lucide="zap"></i> <span data-t="ctApparecchi">Apparecchi richiesti</span></div></div>
     <div class="card-body">
       <div class="chips" id="projChips"></div>
     </div>
   </div>
   <div class="card">
-    <div class="card-header"><div class="card-title"><i data-lucide="file-text"></i> Note luci</div></div>
+    <div class="card-header"><div class="card-title"><i data-lucide="file-text"></i> <span data-t="ctNoteLuci">Note luci</span></div></div>
     <div class="card-body">
       <div class="field"><textarea id="luciNote" oninput="autoSave()" placeholder="Piano luci, richieste speciali, note…"></textarea></div>
     </div>
@@ -605,17 +605,17 @@ header button, header select, header input, header a, header .btn {
 <!-- ── TAB 5: VIDEO ── -->
 <div class="panel" id="panel5" data-print-label="Video">
   <div class="card">
-    <div class="card-header"><div class="card-title"><i data-lucide="film"></i> Proiezione / Video</div></div>
+    <div class="card-header"><div class="card-title"><i data-lucide="film"></i> <span data-t="ctVideo">Proiezione / Video</span></div></div>
     <div class="card-body">
       <div class="grid g2">
-        <div class="field"><label>Proiettore</label><input type="text" id="videoProiettore" oninput="autoSave()" placeholder="es. Panasonic PT-RZ21K"></div>
-        <div class="field"><label>Schermo / Superficie</label><input type="text" id="videoSchermo" oninput="autoSave()" placeholder="es. Fondale 8×6m"></div>
-        <div class="field span2"><label>Sorgenti / Playback</label><input type="text" id="videoSorgenti" oninput="autoSave()" placeholder="es. Mac Pro + Resolume Arena"></div>
+        <div class="field"><label data-t="lProiettore">Proiettore</label><input type="text" id="videoProiettore" oninput="autoSave()" placeholder="es. Panasonic PT-RZ21K"></div>
+        <div class="field"><label data-t="lSchermo">Schermo / Superficie</label><input type="text" id="videoSchermo" oninput="autoSave()" placeholder="es. Fondale 8×6m"></div>
+        <div class="field span2"><label data-t="lSorgenti">Sorgenti / Playback</label><input type="text" id="videoSorgenti" oninput="autoSave()" placeholder="es. Mac Pro + Resolume Arena"></div>
       </div>
     </div>
   </div>
   <div class="card">
-    <div class="card-header"><div class="card-title"><i data-lucide="file-text"></i> Note video</div></div>
+    <div class="card-header"><div class="card-title"><i data-lucide="file-text"></i> <span data-t="ctNoteVideo">Note video</span></div></div>
     <div class="card-body">
       <div class="field"><textarea id="videoNote" oninput="autoSave()" placeholder="Risoluzione, frame rate, segnali, note video…"></textarea></div>
     </div>
@@ -625,12 +625,12 @@ header button, header select, header input, header a, header .btn {
 <!-- ── TAB 6: ELETTRICO ── -->
 <div class="panel" id="panel6" data-print-label="Elettrico">
   <div class="card">
-    <div class="card-header"><div class="card-title"><i data-lucide="zap"></i> Alimentazione elettrica</div></div>
+    <div class="card-header"><div class="card-title"><i data-lucide="zap"></i> <span data-t="ctElettrico">Alimentazione elettrica</span></div></div>
     <div class="card-body">
       <div class="grid g2">
-        <div class="field"><label>Potenza richiesta (kW)</label><input type="text" id="potenza" oninput="autoSave()" placeholder="es. 60 kW trifase"></div>
-        <div class="field"><label>Prese / distrib.</label><input type="text" id="prese" oninput="autoSave()" placeholder="es. 32A CEE x4, 16A x8"></div>
-        <div class="field span2"><label>Note elettrico</label><textarea id="elettricoNote" oninput="autoSave()" placeholder="Specifiche alimentazione, gruppi di continuità, note…"></textarea></div>
+        <div class="field"><label data-t="lPotenza">Potenza richiesta (kW)</label><input type="text" id="potenza" oninput="autoSave()" placeholder="es. 60 kW trifase"></div>
+        <div class="field"><label data-t="lPrese">Prese / distrib.</label><input type="text" id="prese" oninput="autoSave()" placeholder="es. 32A CEE x4, 16A x8"></div>
+        <div class="field span2"><label data-t="lNoteElettrico">Note elettrico</label><textarea id="elettricoNote" oninput="autoSave()" placeholder="Specifiche alimentazione, gruppi di continuità, note…"></textarea></div>
       </div>
     </div>
   </div>
@@ -640,8 +640,8 @@ header button, header select, header input, header a, header .btn {
 <div class="panel" id="panel7" data-print-label="Personale tecnico">
   <div class="card">
     <div class="card-header">
-      <div class="card-title"><i data-lucide="users"></i> Crew tecnica richiesta</div>
-      <button class="btn btn-ghost btn-sm" onclick="addPersRow()">+ Aggiungi ruolo</button>
+      <div class="card-title"><i data-lucide="users"></i> <span data-t="ctCrewTecnica">Crew tecnica richiesta</span></div>
+      <button class="btn btn-ghost btn-sm" onclick="addPersRow()"><span data-t="btnAddRuolo">+ Aggiungi ruolo</span></button>
     </div>
     <div class="card-body" style="padding:0">
       <table class="pers-table">
@@ -651,7 +651,7 @@ header button, header select, header input, header a, header .btn {
     </div>
   </div>
   <div class="card">
-    <div class="card-header"><div class="card-title"><i data-lucide="user-check"></i> Crew compagnia</div></div>
+    <div class="card-header"><div class="card-title"><i data-lucide="user-check"></i> <span data-t="ctCrewCompagnia">Crew compagnia</span></div></div>
     <div class="card-body">
       <div class="grid g2">
         <div class="field"><label>Composizione crew</label><input type="text" id="crewComp" oninput="autoSave()" placeholder="es. 2 tecnici + 1 DSM"></div>
@@ -667,11 +667,11 @@ header button, header select, header input, header a, header .btn {
     <div class="card-header"><div class="card-title"><i data-lucide="briefcase"></i> Logistica e ospitalità</div></div>
     <div class="card-body">
       <div class="grid g2">
-        <div class="field"><label>Camerini richiesti</label><input type="text" id="cameriniRich" oninput="autoSave()" placeholder="es. 2 singoli + 1 collettivo"></div>
-        <div class="field"><label>Catering</label><input type="text" id="catering" oninput="autoSave()" placeholder="es. Pasto caldo per 8 persone"></div>
-        <div class="field"><label>Parcheggio</label><input type="text" id="parcheggio" oninput="autoSave()" placeholder="es. 2 posti riservati + accesso camion"></div>
-        <div class="field"><label>Pernottamento</label><input type="text" id="pernottamento" oninput="autoSave()" placeholder="es. 4 camere singole"></div>
-        <div class="field span2"><label>Note esigenze</label><textarea id="esigenzeNote" oninput="autoSave()" placeholder="Allergie, esigenze speciali, richieste aggiuntive…"></textarea></div>
+        <div class="field"><label data-t="lCameriniRich">Camerini richiesti</label><input type="text" id="cameriniRich" oninput="autoSave()" placeholder="es. 2 singoli + 1 collettivo"></div>
+        <div class="field"><label data-t="lCatering">Catering</label><input type="text" id="catering" oninput="autoSave()" placeholder="es. Pasto caldo per 8 persone"></div>
+        <div class="field"><label data-t="lParcheggio">Parcheggio</label><input type="text" id="parcheggio" oninput="autoSave()" placeholder="es. 2 posti riservati + accesso camion"></div>
+        <div class="field"><label data-t="lPernottamento">Pernottamento</label><input type="text" id="pernottamento" oninput="autoSave()" placeholder="es. 4 camere singole"></div>
+        <div class="field span2"><label data-t="lNoteEsigenze">Note esigenze</label><textarea id="esigenzeNote" oninput="autoSave()" placeholder="Allergie, esigenze speciali, richieste aggiuntive…"></textarea></div>
       </div>
     </div>
   </div>
@@ -680,7 +680,7 @@ header button, header select, header input, header a, header .btn {
 <!-- ── TAB 9: DOCUMENTI ── -->
 <div class="panel" id="panel9" data-print-label="Documenti">
   <div class="card">
-    <div class="card-header"><div class="card-title"><i data-lucide="file-check-2"></i> Documenti richiesti</div></div>
+    <div class="card-header"><div class="card-title"><i data-lucide="file-check-2"></i> <span data-t="ctDocumenti">Documenti richiesti</span></div></div>
     <div class="card-body">
       <div class="doclist" id="docList"></div>
     </div>
@@ -691,7 +691,7 @@ header button, header select, header input, header a, header .btn {
 <div class="panel" id="panel10" data-print-label="Checklist pre-show">
   <div class="card">
     <div class="card-header">
-      <div class="card-title"><i data-lucide="list-checks"></i> Checklist pre-show</div>
+      <div class="card-title"><i data-lucide="list-checks"></i> <span data-t="ctChecklist">Checklist pre-show</span></div>
       <button class="btn btn-ghost btn-sm" onclick="resetChecklist()">Reset</button>
     </div>
     <div class="card-body">
@@ -868,6 +868,31 @@ const STRINGS = {
     loaded: n => '✓ Scheda caricata: ' + n,
     jsonDownloaded: n => '✓ JSON scaricato: ' + n,
     badFile:'⚠️ Errore nel file JSON',
+    lTitolo:'Titolo spettacolo', lCompagnia:'Compagnia', lGenere:'Genere',
+    lDurata:'Durata spettacolo', lRepliche:'N° repliche',
+    lData:'Data', lVenue:'Venue / Teatro', lCapienza:'Capienza',
+    lVenueDir:'Dir. Tecnico Venue', lVenueTel:'Tel Venue', lVenueEmail:'Email Venue',
+    lRefCompNome:'Ref. Compagnia — Nome', lRefCompTel:'Ref. Compagnia — Tel', lRefCompEmail:'Ref. Compagnia — Email',
+    lRefTecNome:'Ref. Tecnico — Nome', lRefTecTel:'Ref. Tecnico — Tel', lRefTecEmail:'Ref. Tecnico — Email',
+    lPavimento:'Pavimento', lQuinte:'Quinte', lFondale:'Fondale', lCamerini:'Camerini', lNotePalco:'Note palco',
+    lAudioImpianto:'Impianto principale', lMixer:'Mixer FOH', lCanali:'Canali / I/O',
+    lMonitor:'Monitor / wedge', lBackline:'Backline / strumenti',
+    lLuciConsole:'Console luci', lDimmer:'Dimmer / canali DMX', lEffetti:'Effetti speciali',
+    lProiettore:'Proiettore', lSchermo:'Schermo / Superficie', lSorgenti:'Sorgenti / Playback',
+    lPotenza:'Potenza richiesta (kW)', lPrese:'Prese / distrib.', lNoteElettrico:'Note elettrico',
+    lCrewComp:'Composizione crew', lNumPersone:'N° persone totali',
+    lCameriniRich:'Camerini richiesti', lCatering:'Catering',
+    lParcheggio:'Parcheggio', lPernottamento:'Pernottamento', lNoteEsigenze:'Note esigenze',
+    ctSpettacolo:'Spettacolo', ctContattiVenue:'Contatti Venue', ctReferenti:'Referenti Compagnia',
+    ctNoteGenerali:'Note generali', ctCrono:'Cronoprogramma giornata',
+    ctDimPalco:'Dimensioni palco', ctDotPalco:'Dotazioni palco',
+    ctAudio:'Impianto audio', ctMicrofoni:'Microfoni richiesti', ctNoteAudio:'Note audio',
+    ctLuci:'Impianto luci', ctApparecchi:'Apparecchi richiesti', ctNoteLuci:'Note luci',
+    ctVideo:'Proiezione / Video', ctNoteVideo:'Note video', ctElettrico:'Alimentazione elettrica',
+    ctCrewTecnica:'Crew tecnica richiesta', ctCrewCompagnia:'Crew compagnia',
+    ctLogistica:'Logistica e ospitalità', ctDocumenti:'Documenti richiesti', ctChecklist:'Checklist pre-show',
+    btnChiama:'Chiama', btnAddCrono:'+ Aggiungi voce', btnAddRuolo:'+ Aggiungi ruolo',
+    spPillRepliche:'Repliche', spPillCapienza:'Capienza',
   },
   en: {
     tab0:'Info', tab1:'Schedule', tab2:'Stage', tab3:'Audio', tab4:'Lights',
@@ -890,6 +915,32 @@ const STRINGS = {
     loaded: n => '✓ Show loaded: ' + n,
     jsonDownloaded: n => '✓ JSON downloaded: ' + n,
     badFile:'⚠️ Error reading JSON file',
+    lTitolo:'Show title', lCompagnia:'Company', lGenere:'Genre',
+    lDurata:'Show duration', lRepliche:'No. of shows',
+    lData:'Date', lVenue:'Venue / Theater', lCapienza:'Capacity',
+    lVenueDir:'Venue Technical Director', lVenueTel:'Venue Phone', lVenueEmail:'Venue Email',
+    lRefCompNome:'Company Rep — Name', lRefCompTel:'Company Rep — Phone', lRefCompEmail:'Company Rep — Email',
+    lRefTecNome:'Tech Rep — Name', lRefTecTel:'Tech Rep — Phone', lRefTecEmail:'Tech Rep — Email',
+    lPavimento:'Floor', lQuinte:'Wings', lFondale:'Backdrop', lCamerini:'Dressing rooms', lNotePalco:'Stage notes',
+    lAudioImpianto:'Main PA system', lMixer:'FOH Mixer', lCanali:'Channels / I/O',
+    lMonitor:'Monitors / wedges', lBackline:'Backline / instruments',
+    lLuciConsole:'Lighting console', lDimmer:'Dimmers / DMX channels', lEffetti:'Special effects',
+    lProiettore:'Projector', lSchermo:'Screen / Surface', lSorgenti:'Sources / Playback',
+    lPotenza:'Required power (kW)', lPrese:'Outlets / distribution', lNoteElettrico:'Power notes',
+    lCrewComp:'Crew composition', lNumPersone:'Total headcount',
+    lCameriniRich:
+'Dressing rooms required', lCatering:'Catering',
+    lParcheggio:'Parking', lPernottamento:'Accommodation', lNoteEsigenze:'Requirements notes',
+    ctSpettacolo:'Show', ctContattiVenue:'Venue Contacts', ctReferenti:'Company Contacts',
+    ctNoteGenerali:'General notes', ctCrono:'Daily schedule',
+    ctDimPalco:'Stage dimensions', ctDotPalco:'Stage equipment',
+    ctAudio:'Audio system', ctMicrofoni:'Microphones required', ctNoteAudio:'Audio notes',
+    ctLuci:'Lighting system', ctApparecchi:'Fixtures required', ctNoteLuci:'Lighting notes',
+    ctVideo:'Projection / Video', ctNoteVideo:'Video notes', ctElettrico:'Power supply',
+    ctCrewTecnica:'Required technical crew', ctCrewCompagnia:'Company crew',
+    ctLogistica:'Logistics & hospitality', ctDocumenti:'Required documents', ctChecklist:'Pre-show checklist',
+    btnChiama:'Call', btnAddCrono:'+ Add entry', btnAddRuolo:'+ Add role',
+    spPillRepliche:'Shows', spPillCapienza:'Capacity',
   }
 };
 
