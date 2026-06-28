@@ -1,0 +1,1551 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ShowRider</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #141414;
+  --surface: #1e1e1e;
+  --surface2: #282828;
+  --border: #333;
+  --accent: #e8a020;
+  --accent2: #c07010;
+  --text: #e0e0e0;
+  --text-dim: #777;
+  --green: #4caf50;
+  --red: #f44336;
+  --blue: #64b5f6;
+  --focus-bg: #1a1600;
+  --hover-row: #252525;
+  --doc-done-bg: #162016;
+  --btn-danger-bg: #2a1515;
+  --btn-danger-hover: #3a1a1a;
+  --modal-bg: rgba(0,0,0,0.75);
+}
+
+body.light {
+  --bg: #f4f4f4;
+  --surface: #ffffff;
+  --surface2: #efefef;
+  --border: #d0d0d0;
+  --accent: #b87010;
+  --accent2: #8a5008;
+  --text: #1a1a1a;
+  --text-dim: #888;
+  --green: #2e7d32;
+  --red: #c62828;
+  --blue: #1565c0;
+  --focus-bg: #fff8ee;
+  --hover-row: #f0f0f0;
+  --doc-done-bg: #e8f5e9;
+  --btn-danger-bg: #fdecea;
+  --btn-danger-hover: #fad4d4;
+  --modal-bg: rgba(0,0,0,0.5);
+}
+
+body {
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  font-size: 14px;
+}
+
+/* ── HEADER ── */
+header {
+  background: var(--surface);
+  border-bottom: 2px solid var(--accent);
+  padding: 10px 20px;
+  padding-left: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 200;
+  flex-wrap: wrap;
+  gap: 10px;
+  -webkit-app-region: drag;
+  user-select: none;
+  min-height: 56px;
+}
+header button, header select, header input, header a, header .btn {
+  -webkit-app-region: no-drag;
+}
+.header-left { display: flex; align-items: center; gap: 12px; }
+.header-icon { font-size: 28px; }
+.header-title { font-size: 17px; font-weight: 700; color: var(--accent); }
+.header-sub { font-size: 11px; color: var(--text-dim); margin-top: 1px; max-width: 260px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.header-center { display: flex; align-items: center; gap: 8px; }
+.header-right { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+
+.stato-select {
+  background: var(--surface2); border: 1px solid var(--border); border-radius: 20px;
+  padding: 4px 12px; color: var(--text); font-size: 12px; font-weight: 600;
+  text-transform: uppercase; cursor: pointer;
+}
+.stato-select.bozza { color: var(--accent); border-color: var(--accent); }
+.stato-select.confermata { color: var(--green); border-color: var(--green); }
+.stato-select.archiviata { color: var(--blue); border-color: var(--blue); }
+
+.autosave { font-size: 11px; color: var(--text-dim); display: flex; align-items: center; gap: 5px; margin-right: 8px; }
+.autosave-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); }
+.autosave-dot.saving { background: var(--accent); animation: pulse 0.8s infinite; }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+/* ── BUTTONS ── */
+.btn {
+  padding: 7px 14px; border: none; border-radius: 6px; cursor: pointer;
+  font-size: 12px; font-weight: 600; transition: all 0.18s;
+  display: inline-flex; align-items: center; gap: 5px; text-decoration: none;
+}
+.btn-accent { background: var(--accent); color: #111; }
+.btn-accent:hover { background: var(--accent2); }
+.btn-ghost { background: var(--surface2); color: var(--text); border: 1px solid var(--border); }
+.btn-ghost:hover { background: var(--border); }
+.btn-danger { background: var(--btn-danger-bg); color: var(--red); border: 1px solid var(--btn-danger-bg); }
+.btn-danger:hover { background: var(--btn-danger-hover); }
+.btn-sm { padding: 4px 10px; font-size: 11px; }
+.btn-icon { padding: 6px 8px; }
+.lang-btn  { padding: 4px 7px; font-size: 18px; line-height: 1; background: var(--surface2); border: 1px solid var(--border); border-radius: 6px; cursor: pointer; transition: all 0.18s; }
+.lang-btn:hover  { border-color: var(--accent); }
+.units-btn { padding: 4px 8px; font-size: 11px; font-weight: 700; background: var(--surface2); border: 1px solid var(--border); border-radius: 6px; cursor: pointer; color: var(--text-dim); transition: all 0.18s; font-family: 'Courier New', monospace; }
+.units-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+/* ── TABS ── */
+.tabs-wrap { background: var(--surface); border-bottom: 1px solid var(--border); overflow-x: auto; display: flex; }
+.tab {
+  padding: 11px 15px; cursor: pointer; font-size: 12px; white-space: nowrap;
+  color: var(--text-dim); border-bottom: 3px solid transparent; transition: all 0.18s;
+  display: flex; align-items: center; gap: 5px; flex-shrink: 0; font-weight: 500;
+}
+.tab:hover { color: var(--text); background: var(--surface2); }
+.tab.active { color: var(--accent); border-bottom-color: var(--accent); font-weight: 700; }
+
+/* ── CONTENT ── */
+.content { max-width: 920px; margin: 0 auto; padding: 20px 16px 40px; }
+.panel { display: none; }
+.panel.active { display: block; }
+
+/* ── CARD ── */
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; margin-bottom: 16px; overflow: hidden; }
+.card-header { background: var(--surface2); padding: 10px 14px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.card-title { display: flex; align-items: center; gap: 7px; font-weight: 700; font-size: 13px; text-transform: uppercase; letter-spacing: 0.5px; color: var(--accent); }
+.card-body { padding: 14px; }
+
+/* ── GRID ── */
+.grid { display: grid; gap: 10px; }
+.g2 { grid-template-columns: 1fr 1fr; }
+.g3 { grid-template-columns: 1fr 1fr 1fr; }
+.g4 { grid-template-columns: 1fr 1fr 1fr 1fr; }
+.span2 { grid-column: span 2; }
+.span3 { grid-column: span 3; }
+.span4 { grid-column: span 4; }
+@media(max-width:640px) { .g2,.g3,.g4 { grid-template-columns: 1fr 1fr; } .span3,.span4 { grid-column: span 2; } }
+@media(max-width:420px) { .g2,.g3,.g4 { grid-template-columns: 1fr; } .span2,.span3,.span4 { grid-column: span 1; } }
+
+/* ── FIELD ── */
+.field { display: flex; flex-direction: column; gap: 3px; }
+.field label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.6px; color: var(--text-dim); font-weight: 600; }
+.field input, .field select, .field textarea {
+  background: var(--bg); border: 1px solid var(--border); border-radius: 6px;
+  padding: 7px 10px; color: var(--text); font-size: 13px; transition: border-color 0.18s; font-family: inherit; width: 100%;
+}
+.field input:focus, .field select:focus, .field textarea:focus { outline: none; border-color: var(--accent); background: var(--focus-bg); }
+.field textarea { resize: vertical; min-height: 70px; }
+.field select option { background: var(--surface2); }
+.contact-btns { display: flex; gap: 8px; margin-top: 10px; }
+
+/* ── CRONO TABLE ── */
+.crono-table { width: 100%; border-collapse: collapse; }
+.crono-table thead tr { border-bottom: 1px solid var(--border); }
+.crono-table th { padding: 6px 10px; font-size: 10px; text-transform: uppercase; color: var(--text-dim); text-align: left; font-weight: 600; }
+.crono-table td { padding: 3px 4px; }
+.crono-table tbody tr:hover td { background: var(--hover-row); }
+.crono-table .time-input {
+  background: var(--bg); border: 1px solid var(--border); border-radius: 5px;
+  padding: 6px 8px; color: var(--accent); font-size: 14px; font-weight: 700;
+  width: 115px; font-family: 'Courier New', monospace;
+}
+.crono-table .time-input:focus { outline: none; border-color: var(--accent); }
+.crono-table .att-input {
+  background: transparent; border: 1px solid transparent; border-radius: 5px;
+  padding: 6px 8px; color: var(--text); font-size: 13px; width: 100%; font-family: inherit;
+}
+.crono-table .att-input:focus { outline: none; border-color: var(--border); background: var(--bg); }
+.crono-del-btn {
+  background: none; border: none; color: var(--text-dim); cursor: pointer;
+  padding: 4px 6px; border-radius: 4px; font-size: 16px; line-height: 1;
+}
+.crono-del-btn:hover { color: var(--red); background: var(--btn-danger-bg); }
+
+/* ── CHIPS ── */
+.chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+.chip { padding: 4px 12px; border-radius: 20px; border: 1px solid var(--border); cursor: pointer; font-size: 12px; background: var(--surface2); transition: all 0.18s; user-select: none; }
+.chip:hover { border-color: var(--accent); color: var(--accent); }
+.chip.on { background: var(--accent); border-color: var(--accent); color: #111; font-weight: 700; }
+
+/* ── PERSONALE TABLE ── */
+.pers-table { width: 100%; border-collapse: collapse; }
+.pers-table th { padding: 6px 10px; font-size: 10px; text-transform: uppercase; color: var(--text-dim); text-align: left; border-bottom: 1px solid var(--border); font-weight: 600; }
+.pers-table td { padding: 3px 4px; }
+.pers-table input { background: var(--bg); border: 1px solid var(--border); border-radius: 5px; padding: 6px 8px; color: var(--text); font-size: 13px; width: 100%; font-family: inherit; }
+.pers-table input:focus { outline: none; border-color: var(--accent); }
+
+/* ── DOCUMENTI ── */
+.doclist { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+@media(max-width:500px) { .doclist { grid-template-columns: 1fr; } }
+.doc-item { display: flex; align-items: center; gap: 10px; padding: 10px 12px; background: var(--surface2); border-radius: 7px; border: 1px solid var(--border); cursor: pointer; transition: all 0.18s; user-select: none; }
+.doc-item:hover { border-color: var(--accent); }
+.doc-item.done { border-color: var(--green); background: var(--doc-done-bg); }
+.doc-check { width: 20px; height: 20px; border-radius: 4px; border: 2px solid var(--border); display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 11px; transition: all 0.18s; }
+.doc-item.done .doc-check { background: var(--green); border-color: var(--green); color: white; }
+.doc-label { font-size: 13px; font-weight: 500; }
+
+/* ── PRE-SHOW CHECKLIST ── */
+.chk-category { margin-bottom: 20px; }
+.chk-cat-title { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; color: var(--text-dim); margin-bottom: 8px; padding-bottom: 4px; border-bottom: 1px solid var(--border); }
+.chk-items { display: flex; flex-direction: column; gap: 6px; }
+.chk-item { display: flex; align-items: center; gap: 10px; padding: 10px 12px; background: var(--surface2); border-radius: 7px; border: 1px solid var(--border); cursor: pointer; transition: all 0.18s; user-select: none; }
+.chk-item:hover { border-color: var(--accent); }
+.chk-item.done { border-color: var(--green); background: var(--doc-done-bg); }
+.chk-item.done .chk-label { text-decoration: line-through; color: var(--text-dim); }
+.chk-box { width: 20px; height: 20px; border-radius: 4px; border: 2px solid var(--border); display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 11px; transition: all 0.18s; }
+.chk-item.done .chk-box { background: var(--green); border-color: var(--green); color: white; }
+.chk-label { font-size: 13px; font-weight: 500; flex: 1; }
+.chk-del { background: none; border: none; color: var(--text-dim); cursor: pointer; padding: 2px 6px; border-radius: 4px; font-size: 14px; }
+.chk-del:hover { color: var(--red); background: var(--btn-danger-bg); }
+.chk-progress-bar { background: var(--surface2); border-radius: 10px; height: 8px; overflow: hidden; margin-bottom: 10px; }
+.chk-progress-fill { height: 100%; background: var(--green); border-radius: 10px; transition: width 0.4s; }
+.chk-progress-label { font-size: 12px; color: var(--text-dim); margin-bottom: 14px; }
+.chk-add-row { display: flex; gap: 8px; margin-top: 16px; }
+.chk-add-row input { flex: 1; background: var(--bg); border: 1px solid var(--border); border-radius: 6px; padding: 7px 10px; color: var(--text); font-size: 13px; font-family: inherit; }
+.chk-add-row input:focus { outline: none; border-color: var(--accent); }
+
+/* ── LIBRARY ── */
+.lib-toolbar { display: flex; align-items: center; gap: 12px; padding: 12px 20px 0; }
+.lib-stats { font-size: 12px; color: var(--text-dim); }
+.lib-search { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 6px 12px; color: var(--text); font-size: 12px; font-family: inherit; }
+.lib-search:focus { outline: none; border-color: var(--accent); }
+.lib-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 14px; padding: 16px 20px 40px; }
+.lib-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; transition: all 0.18s; }
+.lib-card:hover { border-color: var(--accent); box-shadow: 0 4px 20px rgba(232,160,32,0.1); }
+.lib-card-top { display: flex; gap: 12px; padding: 14px; cursor: pointer; }
+.lib-card-icon { font-size: 28px; flex-shrink: 0; color: var(--accent); margin-top: 2px; }
+.lib-card-info { flex: 1; min-width: 0; }
+.lib-card-title { font-size: 15px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.lib-card-company { font-size: 12px; color: var(--text-dim); margin-top: 2px; }
+.lib-card-meta { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px; font-size: 11px; color: var(--text-dim); }
+.lib-card-meta span { display: flex; align-items: center; gap: 3px; }
+.lib-card-footer { display: flex; align-items: center; justify-content: space-between; padding: 8px 14px; border-top: 1px solid var(--border); background: var(--surface2); }
+.lib-card-actions { display: flex; gap: 6px; align-items: center; }
+.stato-badge { font-size: 10px; font-weight: 700; text-transform: uppercase; padding: 3px 8px; border-radius: 10px; }
+.stato-badge.bozza { color: var(--accent); background: rgba(232,160,32,0.1); }
+.stato-badge.confermata { color: var(--green); background: rgba(76,175,80,0.1); }
+.stato-badge.archiviata { color: var(--blue); background: rgba(100,181,246,0.1); }
+.lib-empty { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 80px 20px; gap: 16px; color: var(--text-dim); text-align: center; }
+.lib-empty svg, .lib-empty i { font-size: 48px; opacity: 0.3; }
+.lib-empty-title { font-size: 18px; font-weight: 600; }
+.lib-empty-sub { font-size: 13px; }
+
+/* ── SUMMARY BAR ── */
+.summary-bar { display: flex; gap: 10px; margin-bottom: 14px; flex-wrap: wrap; }
+.summary-pill { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 8px 14px; cursor: pointer; transition: border-color 0.18s; flex: 1; min-width: 100px; }
+.summary-pill:hover { border-color: var(--accent); }
+.sp-label { font-size: 10px; text-transform: uppercase; color: var(--text-dim); letter-spacing: 0.6px; font-weight: 600; }
+.sp-val { font-size: 14px; font-weight: 700; margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+/* ── MODAL ── */
+.modal-overlay { position: fixed; inset: 0; background: var(--modal-bg); display: none; align-items: center; justify-content: center; z-index: 500; padding: 20px; }
+.modal-overlay.open { display: flex; }
+.modal { background: var(--surface); border-radius: 12px; padding: 24px; max-width: 600px; width: 100%; border: 1px solid var(--border); max-height: 90vh; overflow-y: auto; }
+.modal-title { font-size: 16px; font-weight: 700; color: var(--accent); margin-bottom: 6px; display: flex; align-items: center; gap: 8px; }
+.modal-sub { font-size: 12px; color: var(--text-dim); margin-bottom: 20px; }
+.modal-footer { margin-top: 20px; display: flex; justify-content: flex-end; gap: 10px; }
+.tmpl-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px; }
+.tmpl-card { background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; padding: 16px 12px; cursor: pointer; text-align: center; transition: all 0.18s; }
+.tmpl-card:hover { border-color: var(--accent); background: rgba(232,160,32,0.05); }
+.tmpl-card i, .tmpl-card svg { font-size: 28px; color: var(--accent); margin-bottom: 8px; }
+.tmpl-card-name { font-weight: 700; font-size: 13px; }
+.tmpl-card-desc { font-size: 11px; color: var(--text-dim); margin-top: 4px; }
+
+/* ── QR ── */
+.qr-container { display: flex; flex-direction: column; align-items: center; gap: 12px; padding: 16px 0; }
+.qr-title { font-size: 16px; font-weight: 700; }
+.qr-info { font-size: 12px; color: var(--text-dim); }
+#qrCanvas img, #qrCanvas canvas { border-radius: 8px; }
+
+/* ── TOAST ── */
+#toast {
+  position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(20px);
+  background: var(--surface); border: 1px solid var(--border); color: var(--text);
+  padding: 10px 20px; border-radius: 8px; font-size: 13px; font-weight: 500;
+  opacity: 0; transition: all 0.3s; z-index: 900; white-space: nowrap;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+}
+#toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+/* ── PRINT ── */
+.print-cover { display: none; }
+@media print {
+  header, .tabs-wrap, .lib-toolbar, #libraryView, .modal-overlay, #toast, .card-header .btn, .contact-btns, .crono-del-btn, .chk-del, .chk-add-row, .summary-bar { display: none !important; }
+  .print-cover { display: block; text-align: center; padding: 60px 40px; border-bottom: 2px solid #333; margin-bottom: 30px; }
+  .print-cover-logo { font-size: 36px; font-weight: 900; color: #e8a020; }
+  .print-cover-sub { font-size: 14px; color: #666; margin-top: 4px; letter-spacing: 3px; text-transform: uppercase; }
+  .print-cover-show { font-size: 28px; font-weight: 700; margin: 24px 0 16px; }
+  .print-cover-meta { display: flex; gap: 24px; justify-content: center; font-size: 13px; color: #555; flex-wrap: wrap; }
+  .content { padding: 10px 0; }
+  .panel { display: block !important; page-break-inside: avoid; margin-bottom: 20px; }
+  .panel::before { content: attr(data-print-label); display: block; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: #999; margin-bottom: 8px; border-bottom: 1px solid #ddd; padding-bottom: 4px; }
+  .card { border: 1px solid #ddd; margin-bottom: 10px; break-inside: avoid; }
+  .field input, .field select, .field textarea { border-color: #ccc; }
+  .crono-table .time-input { color: #333 !important; }
+}
+</style>
+
+<script src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+<script>var QRCode;!function(){function a(a){this.mode=c.MODE_8BIT_BYTE,this.data=a,this.parsedData=[];for(var b=[],d=0,e=this.data.length;e>d;d++){var f=this.data.charCodeAt(d);f>65536?(b[0]=240|(1835008&f)>>>18,b[1]=128|(258048&f)>>>12,b[2]=128|(4032&f)>>>6,b[3]=128|63&f):f>2048?(b[0]=224|(61440&f)>>>12,b[1]=128|(4032&f)>>>6,b[2]=128|63&f):f>128?(b[0]=192|(1984&f)>>>6,b[1]=128|63&f):b[0]=f,this.parsedData=this.parsedData.concat(b)}this.parsedData.length!=this.data.length&&(this.parsedData.unshift(191),this.parsedData.unshift(187),this.parsedData.unshift(239))}function b(a,b){this.typeNumber=a,this.errorCorrectLevel=b,this.modules=null,this.moduleCount=0,this.dataCache=null,this.dataList=[]}function i(a,b){if(void 0==a.length)throw new Error(a.length+"/"+b);for(var c=0;c<a.length&&0==a[c];)c++;this.num=new Array(a.length-c+b);for(var d=0;d<a.length-c;d++)this.num[d]=a[d+c]}function j(a,b){this.totalCount=a,this.dataCount=b}function k(){this.buffer=[],this.length=0}function m(){return"undefined"!=typeof CanvasRenderingContext2D}function n(){var a=!1,b=navigator.userAgent;return/android/i.test(b)&&(a=!0,aMat=b.toString().match(/android ([0-9]\.[0-9])/i),aMat&&aMat[1]&&(a=parseFloat(aMat[1]))),a}function r(a,b){for(var c=1,e=s(a),f=0,g=l.length;g>=f;f++){var h=0;switch(b){case d.L:h=l[f][0];break;case d.M:h=l[f][1];break;case d.Q:h=l[f][2];break;case d.H:h=l[f][3]}if(h>=e)break;c++}if(c>l.length)throw new Error("Too long data");return c}function s(a){var b=encodeURI(a).toString().replace(/\%[0-9a-fA-F]{2}/g,"a");return b.length+(b.length!=a?3:0)}a.prototype={getLength:function(){return this.parsedData.length},write:function(a){for(var b=0,c=this.parsedData.length;c>b;b++)a.put(this.parsedData[b],8)}},b.prototype={addData:function(b){var c=new a(b);this.dataList.push(c),this.dataCache=null},isDark:function(a,b){if(0>a||this.moduleCount<=a||0>b||this.moduleCount<=b)throw new Error(a+","+b);return this.modules[a][b]},getModuleCount:function(){return this.moduleCount},make:function(){this.makeImpl(!1,this.getBestMaskPattern())},makeImpl:function(a,c){this.moduleCount=4*this.typeNumber+17,this.modules=new Array(this.moduleCount);for(var d=0;d<this.moduleCount;d++){this.modules[d]=new Array(this.moduleCount);for(var e=0;e<this.moduleCount;e++)this.modules[d][e]=null}this.setupPositionProbePattern(0,0),this.setupPositionProbePattern(this.moduleCount-7,0),this.setupPositionProbePattern(0,this.moduleCount-7),this.setupPositionAdjustPattern(),this.setupTimingPattern(),this.setupTypeInfo(a,c),this.typeNumber>=7&&this.setupTypeNumber(a),null==this.dataCache&&(this.dataCache=b.createData(this.typeNumber,this.errorCorrectLevel,this.dataList)),this.mapData(this.dataCache,c)},setupPositionProbePattern:function(a,b){for(var c=-1;7>=c;c++)if(!(-1>=a+c||this.moduleCount<=a+c))for(var d=-1;7>=d;d++)-1>=b+d||this.moduleCount<=b+d||(this.modules[a+c][b+d]=c>=0&&6>=c&&(0==d||6==d)||d>=0&&6>=d&&(0==c||6==c)||c>=2&&4>=c&&d>=2&&4>=d?!0:!1)},getBestMaskPattern:function(){for(var a=0,b=0,c=0;8>c;c++){this.makeImpl(!0,c);var d=f.getLostPoint(this);(0==c||a>d)&&(a=d,b=c)}return b},createMovieClip:function(a,b,c){var d=a.createEmptyMovieClip(b,c),e=1;this.make();for(var f=0;f<this.modules.length;f++)for(var g=f*e,h=0;h<this.modules[f].length;h++){var i=h*e,j=this.modules[f][h];j&&(d.beginFill(0,100),d.moveTo(i,g),d.lineTo(i+e,g),d.lineTo(i+e,g+e),d.lineTo(i,g+e),d.endFill())}return d},setupTimingPattern:function(){for(var a=8;a<this.moduleCount-8;a++)null==this.modules[a][6]&&(this.modules[a][6]=0==a%2);for(var b=8;b<this.moduleCount-8;b++)null==this.modules[6][b]&&(this.modules[6][b]=0==b%2)},setupPositionAdjustPattern:function(){for(var a=f.getPatternPosition(this.typeNumber),b=0;b<a.length;b++)for(var c=0;c<a.length;c++){var d=a[b],e=a[c];if(null==this.modules[d][e])for(var g=-2;2>=g;g++)for(var h=-2;2>=h;h++)this.modules[d+g][e+h]=-2==g||2==g||-2==h||2==h||0==g&&0==h?!0:!1}},setupTypeNumber:function(a){for(var b=f.getBCHTypeNumber(this.typeNumber),c=0;18>c;c++){var d=!a&&1==(1&b>>c);this.modules[Math.floor(c/3)][c%3+this.moduleCount-8-3]=d}for(var c=0;18>c;c++){var d=!a&&1==(1&b>>c);this.modules[c%3+this.moduleCount-8-3][Math.floor(c/3)]=d}},setupTypeInfo:function(a,b){for(var c=this.errorCorrectLevel<<3|b,d=f.getBCHTypeInfo(c),e=0;15>e;e++){var g=!a&&1==(1&d>>e);6>e?this.modules[e][8]=g:8>e?this.modules[e+1][8]=g:this.modules[this.moduleCount-15+e][8]=g}for(var e=0;15>e;e++){var g=!a&&1==(1&d>>e);8>e?this.modules[8][this.moduleCount-e-1]=g:9>e?this.modules[8][15-e-1+1]=g:this.modules[8][15-e-1]=g}this.modules[this.moduleCount-8][8]=!a},mapData:function(a,b){for(var c=-1,d=this.moduleCount-1,e=7,g=0,h=this.moduleCount-1;h>0;h-=2)for(6==h&&h--;;){for(var i=0;2>i;i++)if(null==this.modules[d][h-i]){var j=!1;g<a.length&&(j=1==(1&a[g]>>>e));var k=f.getMask(b,d,h-i);k&&(j=!j),this.modules[d][h-i]=j,e--,-1==e&&(g++,e=7)}if(d+=c,0>d||this.moduleCount<=d){d-=c,c=-c;break}}}},b.PAD0=236,b.PAD1=17,b.createData=function(a,c,d){for(var e=j.getRSBlocks(a,c),g=new k,h=0;h<d.length;h++){var i=d[h];g.put(i.mode,4),g.put(i.getLength(),f.getLengthInBits(i.mode,a)),i.write(g)}for(var l=0,h=0;h<e.length;h++)l+=e[h].dataCount;if(g.getLengthInBits()>8*l)throw new Error("code length overflow. ("+g.getLengthInBits()+">"+8*l+")");for(g.getLengthInBits()+4<=8*l&&g.put(0,4);0!=g.getLengthInBits()%8;)g.putBit(!1);for(;;){if(g.getLengthInBits()>=8*l)break;if(g.put(b.PAD0,8),g.getLengthInBits()>=8*l)break;g.put(b.PAD1,8)}return b.createBytes(g,e)},b.createBytes=function(a,b){for(var c=0,d=0,e=0,g=new Array(b.length),h=new Array(b.length),j=0;j<b.length;j++){var k=b[j].dataCount,l=b[j].totalCount-k;d=Math.max(d,k),e=Math.max(e,l),g[j]=new Array(k);for(var m=0;m<g[j].length;m++)g[j][m]=255&a.buffer[m+c];c+=k;var n=f.getErrorCorrectPolynomial(l),o=new i(g[j],n.getLength()-1),p=o.mod(n);h[j]=new Array(n.getLength()-1);for(var m=0;m<h[j].length;m++){var q=m+p.getLength()-h[j].length;h[j][m]=q>=0?p.get(q):0}}for(var r=0,m=0;m<b.length;m++)r+=b[m].totalCount;for(var s=new Array(r),t=0,m=0;d>m;m++)for(var j=0;j<b.length;j++)m<g[j].length&&(s[t++]=g[j][m]);for(var m=0;e>m;m++)for(var j=0;j<b.length;j++)m<h[j].length&&(s[t++]=h[j][m]);return s};for(var c={MODE_NUMBER:1,MODE_ALPHA_NUM:2,MODE_8BIT_BYTE:4,MODE_KANJI:8},d={L:1,M:0,Q:3,H:2},e={PATTERN000:0,PATTERN001:1,PATTERN010:2,PATTERN011:3,PATTERN100:4,PATTERN101:5,PATTERN110:6,PATTERN111:7},f={PATTERN_POSITION_TABLE:[[],[6,18],[6,22],[6,26],[6,30],[6,34],[6,22,38],[6,24,42],[6,26,46],[6,28,50],[6,30,54],[6,32,58],[6,34,62],[6,26,46,66],[6,26,48,70],[6,26,50,74],[6,30,54,78],[6,30,56,82],[6,30,58,86],[6,34,62,90],[6,28,50,72,94],[6,26,50,74,98],[6,30,54,78,102],[6,28,54,80,106],[6,32,58,84,110],[6,30,58,86,114],[6,34,62,90,118],[6,26,50,74,98,122],[6,30,54,78,102,126],[6,26,52,78,104,130],[6,30,56,82,108,134],[6,34,60,86,112,138],[6,30,58,86,114,142],[6,34,62,90,118,146],[6,30,54,78,102,126,150],[6,24,50,76,102,128,154],[6,28,54,80,106,132,158],[6,32,58,84,110,136,162],[6,26,54,82,110,138,166],[6,30,58,86,114,142,170]],G15:1335,G18:7973,G15_MASK:21522,getBCHTypeInfo:function(a){for(var b=a<<10;f.getBCHDigit(b)-f.getBCHDigit(f.G15)>=0;)b^=f.G15<<f.getBCHDigit(b)-f.getBCHDigit(f.G15);return(a<<10|b)^f.G15_MASK},getBCHTypeNumber:function(a){for(var b=a<<12;f.getBCHDigit(b)-f.getBCHDigit(f.G18)>=0;)b^=f.G18<<f.getBCHDigit(b)-f.getBCHDigit(f.G18);return a<<12|b},getBCHDigit:function(a){for(var b=0;0!=a;)b++,a>>>=1;return b},getPatternPosition:function(a){return f.PATTERN_POSITION_TABLE[a-1]},getMask:function(a,b,c){switch(a){case e.PATTERN000:return 0==(b+c)%2;case e.PATTERN001:return 0==b%2;case e.PATTERN010:return 0==c%3;case e.PATTERN011:return 0==(b+c)%3;case e.PATTERN100:return 0==(Math.floor(b/2)+Math.floor(c/3))%2;case e.PATTERN101:return 0==b*c%2+b*c%3;case e.PATTERN110:return 0==(b*c%2+b*c%3)%2;case e.PATTERN111:return 0==(b*c%3+(b+c)%2)%2;default:throw new Error("bad maskPattern:"+a)}},getErrorCorrectPolynomial:function(a){for(var b=new i([1],0),c=0;a>c;c++)b=b.multiply(new i([1,g.gexp(c)],0));return b},getLengthInBits:function(a,b){if(b>=1&&10>b)switch(a){case c.MODE_NUMBER:return 10;case c.MODE_ALPHA_NUM:return 9;case c.MODE_8BIT_BYTE:return 8;case c.MODE_KANJI:return 8;default:throw new Error("mode:"+a)}else if(27>b)switch(a){case c.MODE_NUMBER:return 12;case c.MODE_ALPHA_NUM:return 11;case c.MODE_8BIT_BYTE:return 16;case c.MODE_KANJI:return 10;default:throw new Error("mode:"+a)}else{if(!(41>b))throw new Error("type:"+b);switch(a){case c.MODE_NUMBER:return 14;case c.MODE_ALPHA_NUM:return 13;case c.MODE_8BIT_BYTE:return 16;case c.MODE_KANJI:return 12;default:throw new Error("mode:"+a)}}},getLostPoint:function(a){for(var b=a.getModuleCount(),c=0,d=0;b>d;d++)for(var e=0;b>e;e++){for(var f=0,g=a.isDark(d,e),h=-1;1>=h;h++)if(!(0>d+h||d+h>=b))for(var i=-1;1>=i;i++)0>e+i||e+i>=b||(0!=h||0!=i)&&g==a.isDark(d+h,e+i)&&f++;f>5&&(c+=3+f-5)}for(var d=0;b-1>d;d++)for(var e=0;b-1>e;e++){var j=0;a.isDark(d,e)&&j++,a.isDark(d+1,e)&&j++,a.isDark(d,e+1)&&j++,a.isDark(d+1,e+1)&&j++,(0==j||4==j)&&(c+=3)}for(var d=0;b>d;d++)for(var e=0;b-6>e;e++)a.isDark(d,e)&&!a.isDark(d,e+1)&&a.isDark(d,e+2)&&a.isDark(d,e+3)&&a.isDark(d,e+4)&&!a.isDark(d,e+5)&&a.isDark(d,e+6)&&(c+=40);for(var e=0;b>e;e++)for(var d=0;b-6>d;d++)a.isDark(d,e)&&!a.isDark(d+1,e)&&a.isDark(d+2,e)&&a.isDark(d+3,e)&&a.isDark(d+4,e)&&!a.isDark(d+5,e)&&a.isDark(d+6,e)&&(c+=40);for(var k=0,e=0;b>e;e++)for(var d=0;b>d;d++)a.isDark(d,e)&&k++;var l=Math.abs(100*k/b/b-50)/5;return c+=10*l}},g={glog:function(a){if(1>a)throw new Error("glog("+a+")");return g.LOG_TABLE[a]},gexp:function(a){for(;0>a;)a+=255;for(;a>=256;)a-=255;return g.EXP_TABLE[a]},EXP_TABLE:new Array(256),LOG_TABLE:new Array(256)},h=0;8>h;h++)g.EXP_TABLE[h]=1<<h;for(var h=8;256>h;h++)g.EXP_TABLE[h]=g.EXP_TABLE[h-4]^g.EXP_TABLE[h-5]^g.EXP_TABLE[h-6]^g.EXP_TABLE[h-8];for(var h=0;255>h;h++)g.LOG_TABLE[g.EXP_TABLE[h]]=h;i.prototype={get:function(a){return this.num[a]},getLength:function(){return this.num.length},multiply:function(a){for(var b=new Array(this.getLength()+a.getLength()-1),c=0;c<this.getLength();c++)for(var d=0;d<a.getLength();d++)b[c+d]^=g.gexp(g.glog(this.get(c))+g.glog(a.get(d)));return new i(b,0)},mod:function(a){if(this.getLength()-a.getLength()<0)return this;for(var b=g.glog(this.get(0))-g.glog(a.get(0)),c=new Array(this.getLength()),d=0;d<this.getLength();d++)c[d]=this.get(d);for(var d=0;d<a.getLength();d++)c[d]^=g.gexp(g.glog(a.get(d))+b);return new i(c,0).mod(a)}},j.RS_BLOCK_TABLE=[[1,26,19],[1,26,16],[1,26,13],[1,26,9],[1,44,34],[1,44,28],[1,44,22],[1,44,16],[1,70,55],[1,70,44],[2,35,17],[2,35,13],[1,100,80],[2,50,32],[2,50,24],[4,25,9],[1,134,108],[2,67,43],[2,33,15,2,34,16],[2,33,11,2,34,12],[2,86,68],[4,43,27],[4,43,19],[4,43,15],[2,98,78],[4,49,31],[2,32,14,4,33,15],[4,39,13,1,40,14],[2,121,97],[2,60,38,2,61,39],[4,40,18,2,41,19],[4,40,14,2,41,15],[2,146,116],[3,58,36,2,59,37],[4,36,16,4,37,17],[4,36,12,4,37,13],[2,86,68,2,87,69],[4,69,43,1,70,44],[6,43,19,2,44,20],[6,43,15,2,44,16],[4,101,81],[1,80,50,4,81,51],[4,50,22,4,51,23],[3,36,12,8,37,13],[2,116,92,2,117,93],[6,58,36,2,59,37],[4,46,20,6,47,21],[7,42,14,4,43,15],[4,133,107],[8,59,37,1,60,38],[8,44,20,4,45,21],[12,33,11,4,34,12],[3,145,115,1,146,116],[4,64,40,5,65,41],[11,36,16,5,37,17],[11,36,12,5,37,13],[5,109,87,1,110,88],[5,65,41,5,66,42],[5,54,24,7,55,25],[11,36,12],[5,122,98,1,123,99],[7,73,45,3,74,46],[15,43,19,2,44,20],[3,45,15,13,46,16],[1,135,107,5,136,108],[10,74,46,1,75,47],[1,50,22,15,51,23],[2,42,14,17,43,15],[5,150,120,1,151,121],[9,69,43,4,70,44],[17,50,22,1,51,23],[2,42,14,19,43,15],[3,141,113,4,142,114],[3,70,44,11,71,45],[17,47,21,4,48,22],[9,39,13,16,40,14],[3,135,107,5,136,108],[3,67,41,13,68,42],[15,54,24,5,55,25],[15,43,15,10,44,16],[4,144,116,4,145,117],[17,68,42],[17,50,22,6,51,23],[19,46,16,6,47,17],[2,139,111,7,140,112],[17,74,46],[7,54,24,16,55,25],[34,37,13],[4,151,121,5,152,122],[4,75,47,14,76,48],[11,54,24,14,55,25],[16,45,15,14,46,16],[6,147,117,4,148,118],[6,73,45,14,74,46],[11,54,24,16,55,25],[30,46,16,2,47,17],[8,132,106,4,133,107],[8,75,47,13,76,48],[7,54,24,22,55,25],[22,45,15,13,46,16],[10,142,114,2,143,115],[19,74,46,4,75,47],[28,50,22,6,51,23],[33,46,16,4,47,17],[8,152,122,4,153,123],[22,73,45,3,74,46],[8,53,23,26,54,24],[12,45,15,28,46,16],[3,147,117,10,148,118],[3,73,45,23,74,46],[4,54,24,31,55,25],[11,45,15,31,46,16],[7,146,116,7,147,117],[21,73,45,7,74,46],[1,53,23,37,54,24],[19,45,15,26,46,16],[5,145,115,10,146,116],[19,75,47,10,76,48],[15,54,24,25,55,25],[23,45,15,25,46,16],[13,145,115,3,146,116],[2,74,46,29,75,47],[42,54,24,1,55,25],[23,45,15,28,46,16],[17,145,115],[10,74,46,23,75,47],[10,54,24,35,55,25],[19,45,15,35,46,16],[17,145,115,1,146,116],[14,74,46,21,75,47],[29,54,24,19,55,25],[11,45,15,46,46,16],[13,145,115,6,146,116],[14,74,46,23,75,47],[44,54,24,7,55,25],[59,46,16,1,47,17],[12,151,121,7,152,122],[12,75,47,26,76,48],[39,54,24,14,55,25],[22,45,15,41,46,16],[6,151,121,14,152,122],[6,75,47,34,76,48],[46,54,24,10,55,25],[2,45,15,64,46,16],[17,152,122,4,153,123],[29,74,46,14,75,47],[49,54,24,10,55,25],[24,45,15,46,46,16],[4,152,122,18,153,123],[13,74,46,32,75,47],[48,54,24,14,55,25],[42,45,15,32,46,16],[20,147,117,4,148,118],[40,75,47,7,76,48],[43,54,24,22,55,25],[10,45,15,67,46,16],[19,148,118,6,149,119],[18,75,47,31,76,48],[34,54,24,34,55,25],[20,45,15,61,46,16]],j.getRSBlocks=function(a,b){var c=j.getRsBlockTable(a,b);if(void 0==c)throw new Error("bad rs block @ typeNumber:"+a+"/errorCorrectLevel:"+b);for(var d=c.length/3,e=[],f=0;d>f;f++)for(var g=c[3*f+0],h=c[3*f+1],i=c[3*f+2],k=0;g>k;k++)e.push(new j(h,i));return e},j.getRsBlockTable=function(a,b){switch(b){case d.L:return j.RS_BLOCK_TABLE[4*(a-1)+0];case d.M:return j.RS_BLOCK_TABLE[4*(a-1)+1];case d.Q:return j.RS_BLOCK_TABLE[4*(a-1)+2];case d.H:return j.RS_BLOCK_TABLE[4*(a-1)+3];default:return void 0}},k.prototype={get:function(a){var b=Math.floor(a/8);return 1==(1&this.buffer[b]>>>7-a%8)},put:function(a,b){for(var c=0;b>c;c++)this.putBit(1==(1&a>>>b-c-1))},getLengthInBits:function(){return this.length},putBit:function(a){var b=Math.floor(this.length/8);this.buffer.length<=b&&this.buffer.push(0),a&&(this.buffer[b]|=128>>>this.length%8),this.length++}};var l=[[17,14,11,7],[32,26,20,14],[53,42,32,24],[78,62,46,34],[106,84,60,44],[134,106,74,58],[154,122,86,64],[192,152,108,84],[230,180,130,98],[271,213,151,119],[321,251,177,137],[367,287,203,155],[425,331,241,177],[458,362,258,194],[520,412,292,220],[586,450,322,250],[644,504,364,280],[718,560,394,310],[792,624,442,338],[858,666,482,382],[929,711,509,403],[1003,779,565,439],[1091,857,611,461],[1171,911,661,511],[1273,997,715,535],[1367,1059,751,593],[1465,1125,805,625],[1528,1190,868,658],[1628,1264,908,698],[1732,1370,982,742],[1840,1452,1030,790],[1952,1538,1112,842],[2068,1628,1168,898],[2188,1722,1228,958],[2303,1809,1283,983],[2431,1911,1351,1051],[2563,1989,1423,1093],[2699,2099,1499,1139],[2809,2213,1579,1219],[2953,2331,1663,1273]],o=function(){var a=function(a,b){this._el=a,this._htOption=b};return a.prototype.draw=function(a){function g(a,b){var c=document.createElementNS("http://www.w3.org/2000/svg",a);for(var d in b)b.hasOwnProperty(d)&&c.setAttribute(d,b[d]);return c}var b=this._htOption,c=this._el,d=a.getModuleCount();Math.floor(b.width/d),Math.floor(b.height/d),this.clear();var h=g("svg",{viewBox:"0 0 "+String(d)+" "+String(d),width:"100%",height:"100%",fill:b.colorLight});h.setAttributeNS("http://www.w3.org/2000/xmlns/","xmlns:xlink","http://www.w3.org/1999/xlink"),c.appendChild(h),h.appendChild(g("rect",{fill:b.colorDark,width:"1",height:"1",id:"template"}));for(var i=0;d>i;i++)for(var j=0;d>j;j++)if(a.isDark(i,j)){var k=g("use",{x:String(i),y:String(j)});k.setAttributeNS("http://www.w3.org/1999/xlink","href","#template"),h.appendChild(k)}},a.prototype.clear=function(){for(;this._el.hasChildNodes();)this._el.removeChild(this._el.lastChild)},a}(),p="svg"===document.documentElement.tagName.toLowerCase(),q=p?o:m()?function(){function a(){this._elImage.src=this._elCanvas.toDataURL("image/png"),this._elImage.style.display="block",this._elCanvas.style.display="none"}function d(a,b){var c=this;if(c._fFail=b,c._fSuccess=a,null===c._bSupportDataURI){var d=document.createElement("img"),e=function(){c._bSupportDataURI=!1,c._fFail&&_fFail.call(c)},f=function(){c._bSupportDataURI=!0,c._fSuccess&&c._fSuccess.call(c)};return d.onabort=e,d.onerror=e,d.onload=f,d.src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg==",void 0}c._bSupportDataURI===!0&&c._fSuccess?c._fSuccess.call(c):c._bSupportDataURI===!1&&c._fFail&&c._fFail.call(c)}if(this._android&&this._android<=2.1){var b=1/window.devicePixelRatio,c=CanvasRenderingContext2D.prototype.drawImage;CanvasRenderingContext2D.prototype.drawImage=function(a,d,e,f,g,h,i,j){if("nodeName"in a&&/img/i.test(a.nodeName))for(var l=arguments.length-1;l>=1;l--)arguments[l]=arguments[l]*b;else"undefined"==typeof j&&(arguments[1]*=b,arguments[2]*=b,arguments[3]*=b,arguments[4]*=b);c.apply(this,arguments)}}var e=function(a,b){this._bIsPainted=!1,this._android=n(),this._htOption=b,this._elCanvas=document.createElement("canvas"),this._elCanvas.width=b.width,this._elCanvas.height=b.height,a.appendChild(this._elCanvas),this._el=a,this._oContext=this._elCanvas.getContext("2d"),this._bIsPainted=!1,this._elImage=document.createElement("img"),this._elImage.style.display="none",this._el.appendChild(this._elImage),this._bSupportDataURI=null};return e.prototype.draw=function(a){var b=this._elImage,c=this._oContext,d=this._htOption,e=a.getModuleCount(),f=d.width/e,g=d.height/e,h=Math.round(f),i=Math.round(g);b.style.display="none",this.clear();for(var j=0;e>j;j++)for(var k=0;e>k;k++){var l=a.isDark(j,k),m=k*f,n=j*g;c.strokeStyle=l?d.colorDark:d.colorLight,c.lineWidth=1,c.fillStyle=l?d.colorDark:d.colorLight,c.fillRect(m,n,f,g),c.strokeRect(Math.floor(m)+.5,Math.floor(n)+.5,h,i),c.strokeRect(Math.ceil(m)-.5,Math.ceil(n)-.5,h,i)}this._bIsPainted=!0},e.prototype.makeImage=function(){this._bIsPainted&&d.call(this,a)},e.prototype.isPainted=function(){return this._bIsPainted},e.prototype.clear=function(){this._oContext.clearRect(0,0,this._elCanvas.width,this._elCanvas.height),this._bIsPainted=!1},e.prototype.round=function(a){return a?Math.floor(1e3*a)/1e3:a},e}():function(){var a=function(a,b){this._el=a,this._htOption=b};return a.prototype.draw=function(a){for(var b=this._htOption,c=this._el,d=a.getModuleCount(),e=Math.floor(b.width/d),f=Math.floor(b.height/d),g=['<table style="border:0;border-collapse:collapse;">'],h=0;d>h;h++){g.push("<tr>");for(var i=0;d>i;i++)g.push('<td style="border:0;border-collapse:collapse;padding:0;margin:0;width:'+e+"px;height:"+f+"px;background-color:"+(a.isDark(h,i)?b.colorDark:b.colorLight)+';"></td>');g.push("</tr>")}g.push("</table>"),c.innerHTML=g.join("");var j=c.childNodes[0],k=(b.width-j.offsetWidth)/2,l=(b.height-j.offsetHeight)/2;k>0&&l>0&&(j.style.margin=l+"px "+k+"px")},a.prototype.clear=function(){this._el.innerHTML=""},a}();QRCode=function(a,b){if(this._htOption={width:256,height:256,typeNumber:4,colorDark:"#000000",colorLight:"#ffffff",correctLevel:d.H},"string"==typeof b&&(b={text:b}),b)for(var c in b)this._htOption[c]=b[c];"string"==typeof a&&(a=document.getElementById(a)),this._android=n(),this._el=a,this._oQRCode=null,this._oDrawing=new q(this._el,this._htOption),this._htOption.text&&this.makeCode(this._htOption.text)},QRCode.prototype.makeCode=function(a){this._oQRCode=new b(r(a,this._htOption.correctLevel),this._htOption.correctLevel),this._oQRCode.addData(a),this._oQRCode.make(),this._el.title=a,this._oDrawing.draw(this._oQRCode),this.makeImage()},QRCode.prototype.makeImage=function(){"function"==typeof this._oDrawing.makeImage&&(!this._android||this._android>=3)&&this._oDrawing.makeImage()},QRCode.prototype.clear=function(){this._oDrawing.clear()},QRCode.CorrectLevel=d}();</script>
+</head>
+<body>
+
+<!-- ═══ HEADER ═══ -->
+<header>
+  <div class="header-left">
+    <div class="header-icon"><i data-lucide="clapperboard"></i></div>
+    <div>
+      <div class="header-title">ShowRider</div>
+      <div class="header-sub" id="headerSub">Libreria</div>
+    </div>
+  </div>
+
+  <!-- Library header -->
+  <div class="header-center" id="hLibCenter">
+    <input type="text" class="lib-search" id="headerSearch" placeholder="Cerca schede…" oninput="filterLibrary()" style="width:220px; padding:5px 12px; font-size:12px;">
+  </div>
+  <div class="header-right" id="hLibRight">
+    <button class="lang-btn" onclick="toggleLang()" title="Switch language">🇮🇹</button>
+    <button class="units-btn" onclick="toggleUnits()" title="Switch units">m↔ft</button>
+    <button class="btn btn-ghost" id="themeBtn" onclick="toggleTheme()"><i data-lucide="moon"></i></button>
+    <button class="btn btn-accent" onclick="showTemplateModal()"><i data-lucide="file-plus"></i> <span data-t="newShow">Nuova scheda</span></button>
+  </div>
+
+  <!-- Editor header -->
+  <div class="header-center" id="hEdCenter" style="display:none">
+    <button class="btn btn-ghost btn-sm" onclick="backToLibrary()"><i data-lucide="arrow-left"></i> <span data-t="backLib">Libreria</span></button>
+    <select class="stato-select bozza" id="statoSelect" onchange="updateStato()">
+      <option value="bozza">● Bozza</option>
+      <option value="confermata">● Confermata</option>
+      <option value="archiviata">● Archiviata</option>
+    </select>
+  </div>
+  <div class="header-right" id="hEdRight" style="display:none">
+    <div class="autosave"><div class="autosave-dot" id="autosaveDot"></div><span id="autosaveLabel">Salvato</span></div>
+    <button class="lang-btn" onclick="toggleLang()" title="Switch language">🇮🇹</button>
+    <button class="units-btn" onclick="toggleUnits()" title="Switch units">m↔ft</button>
+    <button class="btn btn-ghost" id="themeBtn2" onclick="toggleTheme()"><i data-lucide="moon"></i></button>
+    <button class="btn btn-ghost" onclick="showQR()" title="QR Code"><i data-lucide="qr-code"></i></button>
+    <button class="btn btn-ghost" onclick="loadFile()"><i data-lucide="folder-open"></i> <span data-t="btnOpen">Apri</span></button>
+    <button class="btn btn-ghost" onclick="exportJSON()"><i data-lucide="download"></i> <span data-t="btnJSON">JSON</span></button>
+    <button class="btn btn-accent" onclick="printScheda()"><i data-lucide="printer"></i> <span data-t="btnPDF">PDF</span></button>
+  </div>
+</header>
+
+<!-- ═══ LIBRARY VIEW ═══ -->
+<div id="libraryView">
+  <div class="lib-toolbar">
+    <span class="lib-stats" id="libStats"></span>
+  </div>
+  <div class="lib-grid" id="libraryGrid"></div>
+  <div id="libEmpty" class="lib-empty" style="display:none">
+    <i data-lucide="folder-open"></i>
+    <div class="lib-empty-title">Nessuna scheda</div>
+    <div class="lib-empty-sub">Crea la tua prima scheda tecnica</div>
+    <button class="btn btn-accent" onclick="showTemplateModal()"><i data-lucide="file-plus"></i> Nuova scheda</button>
+  </div>
+</div>
+
+<!-- ═══ TEMPLATE MODAL ═══ -->
+<div class="modal-overlay" id="templateModal">
+  <div class="modal">
+    <div class="modal-title"><i data-lucide="layout-template"></i> Scegli template</div>
+    <div class="modal-sub">Seleziona il tipo di spettacolo per partire con i campi precompilati</div>
+    <div class="tmpl-grid" id="tmplGrid"></div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('templateModal')">Annulla</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ QR MODAL ═══ -->
+<div class="modal-overlay" id="qrModal">
+  <div class="modal" style="max-width:420px">
+    <div class="modal-title"><i data-lucide="qr-code"></i> QR Code scheda</div>
+    <div class="modal-sub">Inquadra per leggere le info principali della scheda</div>
+    <div class="qr-container">
+      <div class="qr-title" id="qrShowTitle"></div>
+      <div id="qrCanvas"></div>
+      <div class="qr-info" id="qrInfo"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('qrModal')">Chiudi</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ EDITOR ═══ -->
+<div class="tabs-wrap" id="editorTabs" style="display:none">
+  <div class="tab active" onclick="goTab(0)"><i data-lucide="info"></i><span class="tab-txt"> Info</span></div>
+  <div class="tab" onclick="goTab(1)"><i data-lucide="clock-4"></i><span class="tab-txt"> Crono</span></div>
+  <div class="tab" onclick="goTab(2)"><i data-lucide="layout-template"></i><span class="tab-txt"> Palco</span></div>
+  <div class="tab" onclick="goTab(3)"><i data-lucide="volume-2"></i><span class="tab-txt"> Audio</span></div>
+  <div class="tab" onclick="goTab(4)"><i data-lucide="lightbulb"></i><span class="tab-txt"> Luci</span></div>
+  <div class="tab" onclick="goTab(5)"><i data-lucide="film"></i><span class="tab-txt"> Video</span></div>
+  <div class="tab" onclick="goTab(6)"><i data-lucide="zap"></i><span class="tab-txt"> Elettrico</span></div>
+  <div class="tab" onclick="goTab(7)"><i data-lucide="users"></i><span class="tab-txt"> Personale</span></div>
+  <div class="tab" onclick="goTab(8)"><i data-lucide="briefcase"></i><span class="tab-txt"> Esigenze</span></div>
+  <div class="tab" onclick="goTab(9)"><i data-lucide="file-check-2"></i><span class="tab-txt"> Documenti</span></div>
+  <div class="tab" onclick="goTab(10)"><i data-lucide="list-checks"></i><span class="tab-txt"> Checklist</span></div>
+</div>
+
+<input type="file" id="fileInput" accept=".json" style="display:none" onchange="handleFile(event)">
+
+<div class="content" id="editorContent" style="display:none">
+
+<!-- PRINT COVER -->
+<div class="print-cover">
+  <div class="print-cover-logo">ShowRider</div>
+  <div class="print-cover-sub">Technical Rider</div>
+  <div class="print-cover-show" id="pcShow"></div>
+  <div class="print-cover-meta">
+    <span><strong>Venue:</strong> <span id="pcVenue"></span></span>
+    <span><strong>Data:</strong> <span id="pcData"></span></span>
+    <span><strong>Repliche:</strong> <span id="pcRepliche"></span></span>
+    <span><strong>Stato:</strong> <span id="pcStato"></span></span>
+  </div>
+</div>
+
+<!-- ── TAB 0: INFO ── -->
+<div class="panel active" id="panel0" data-print-label="Informazioni generali">
+  <div class="summary-bar">
+    <div class="summary-pill" onclick="focusField('venue')"><div class="sp-label">Venue</div><div class="sp-val" id="spVenue">—</div></div>
+    <div class="summary-pill" onclick="focusField('data')"><div class="sp-label">Data</div><div class="sp-val" id="spData">—</div></div>
+    <div class="summary-pill" onclick="focusField('repliche')"><div class="sp-label">Repliche</div><div class="sp-val" id="spRepliche">—</div></div>
+    <div class="summary-pill" onclick="focusField('capienza')"><div class="sp-label">Capienza</div><div class="sp-val" id="spCapienza">—</div></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header"><div class="card-title"><i data-lucide="clapperboard"></i> Spettacolo</div></div>
+    <div class="card-body">
+      <div class="grid g2">
+        <div class="field span2"><label>Titolo spettacolo</label><input type="text" id="titolo" oninput="autoSave()" placeholder="Es. Il nome della rosa"></div>
+        <div class="field"><label>Compagnia</label><input type="text" id="compagnia" oninput="autoSave()" placeholder="Nome compagnia"></div>
+        <div class="field"><label>Genere</label>
+          <select id="genere" onchange="autoSave()">
+            <option>Teatro</option><option>Danza</option><option>Musica</option>
+            <option>Opera</option><option>Circo</option><option>Multimediale</option><option>Altro</option>
+          </select>
+        </div>
+        <div class="field"><label>Durata spettacolo</label><input type="text" id="durata" oninput="autoSave()" placeholder="Es. 90 min + 15 intervallo"></div>
+        <div class="field"><label>N° repliche</label><input type="number" id="repliche" oninput="autoSave()" placeholder="1" min="1"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header"><div class="card-title"><i data-lucide="map-pin"></i> Venue</div></div>
+    <div class="card-body">
+      <div class="grid g2">
+        <div class="field"><label>Data</label><input type="date" id="data" oninput="autoSave()"></div>
+        <div class="field"><label>Venue / Teatro</label>
+          <input type="text" id="venue" oninput="autoSave()" placeholder="Es. Teatro Grande" autocomplete="off">
+        </div>
+        <div class="field"><label>Capienza</label><input type="text" id="capienza" oninput="autoSave()" placeholder="Es. 300 posti"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header"><div class="card-title"><i data-lucide="building-2"></i> Contatti Venue</div></div>
+    <div class="card-body">
+      <div class="grid g3">
+        <div class="field"><label>Dir. Tecnico Venue</label><input type="text" id="venueContNome" oninput="autoSave()" placeholder="Nome e cognome"></div>
+        <div class="field"><label>Tel Venue</label><input type="tel" id="venueContTel" oninput="autoSave()" placeholder="+39 …"></div>
+        <div class="field"><label>Email Venue</label><input type="email" id="venueContEmail" oninput="autoSave()" placeholder="email@teatro.it"></div>
+      </div>
+      <div class="contact-btns">
+        <button class="btn btn-ghost btn-sm" onclick="callVenue()"><i data-lucide="phone"></i> Chiama</button>
+        <button class="btn btn-ghost btn-sm" onclick="emailVenue()"><i data-lucide="mail"></i> Email</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header"><div class="card-title"><i data-lucide="contact"></i> Referenti Compagnia</div></div>
+    <div class="card-body">
+      <div class="grid g3">
+        <div class="field"><label>Ref. Compagnia — Nome</label><input type="text" id="refCompNome" oninput="autoSave()" placeholder="Nome e cognome"></div>
+        <div class="field"><label>Ref. Compagnia — Tel</label><input type="tel" id="refCompTel" oninput="autoSave()" placeholder="+39 …"></div>
+        <div class="field"><label>Ref. Compagnia — Email</label><input type="email" id="refCompEmail" oninput="autoSave()" placeholder="email@…"></div>
+        <div class="field"><label>Ref. Tecnico — Nome</label><input type="text" id="refTecNome" oninput="autoSave()" placeholder="Nome e cognome"></div>
+        <div class="field"><label>Ref. Tecnico — Tel</label><input type="tel" id="refTecTel" oninput="autoSave()" placeholder="+39 …"></div>
+        <div class="field"><label>Ref. Tecnico — Email</label><input type="email" id="refTecEmail" oninput="autoSave()" placeholder="email@…"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header"><div class="card-title"><i data-lucide="sticky-note"></i> Note generali</div></div>
+    <div class="card-body">
+      <div class="field"><textarea id="noteGenerali" oninput="autoSave()" placeholder="Note aggiuntive, richieste speciali…" style="min-height:100px"></textarea></div>
+    </div>
+  </div>
+</div>
+
+<!-- ── TAB 1: CRONO ── -->
+<div class="panel" id="panel1" data-print-label="Cronoprogramma">
+  <div class="card">
+    <div class="card-header">
+      <div class="card-title"><i data-lucide="clock-4"></i> Cronoprogramma giornata</div>
+      <button class="btn btn-ghost btn-sm" onclick="addCronoRow()">+ Aggiungi voce</button>
+    </div>
+    <div class="card-body" style="padding:0">
+      <table class="crono-table">
+        <thead><tr><th style="width:125px">Orario</th><th>Attività</th><th style="width:40px"></th></tr></thead>
+        <tbody id="cronoBody"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ── TAB 2: PALCO ── -->
+<div class="panel" id="panel2" data-print-label="Palco">
+  <div class="card">
+    <div class="card-header"><div class="card-title"><i data-lucide="ruler"></i> Dimensioni palco</div></div>
+    <div class="card-body">
+      <div class="grid g4">
+        <div class="field"><label>Larghezza (m)</label><input type="text" id="palcoLarg" oninput="autoSave()" placeholder="es. 12"></div>
+        <div class="field"><label>Profondità (m)</label><input type="text" id="palcoProf" oninput="autoSave()" placeholder="es. 8"></div>
+        <div class="field"><label>Altezza (m)</label><input type="text" id="palcoAlt" oninput="autoSave()" placeholder="es. 6"></div>
+        <div class="field"><label>Graticcia (m)</label><input type="text" id="graticcia" oninput="autoSave()" placeholder="es. 9"></div>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-header"><div class="card-title"><i data-lucide="layout-template"></i> Dotazioni palco</div></div>
+    <div class="card-body">
+      <div class="grid g2">
+        <div class="field"><label>Pavimento</label><input type="text" id="pavimento" oninput="autoSave()" placeholder="es. Linoleum nero"></div>
+        <div class="field"><label>Quinte</label><input type="text" id="quinte" oninput="autoSave()" placeholder="es. 4 coppie velluto nero"></div>
+        <div class="field"><label>Fondale</label><input type="text" id="fondale" oninput="autoSave()" placeholder="es. Cyclorama bianco"></div>
+        <div class="field"><label>Camerini</label><input type="text" id="camerini" oninput="autoSave()" placeholder="es. 3 camerini individuali"></div>
+        <div class="field span2"><label>Note palco</label><textarea id="palcoNote" oninput="autoSave()" placeholder="Note aggiuntive sul palco…"></textarea></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── TAB 3: AUDIO ── -->
+<div class="panel" id="panel3" data-print-label="Audio">
+  <div class="card">
+    <div class="card-header"><div class="card-title"><i data-lucide="volume-2"></i> Impianto audio</div></div>
+    <div class="card-body">
+      <div class="grid g2">
+        <div class="field"><label>Impianto principale</label><input type="text" id="audioImpianto" oninput="autoSave()" placeholder="es. L-Acoustics KARA"></div>
+        <div class="field"><label>Mixer FOH</label><input type="text" id="audioMixer" oninput="autoSave()" placeholder="es. DiGiCo SD12"></div>
+        <div class="field"><label>Canali / I/O</label><input type="text" id="audioCanali" oninput="autoSave()" placeholder="es. 48 in / 24 out"></div>
+        <div class="field"><label>Monitor / wedge</label><input type="text" id="audioMonitor" oninput="autoSave()" placeholder="es. 6 × d&b M4"></div>
+        <div class="field span2"><label>Backline / strumenti</label><input type="text" id="backline" oninput="autoSave()" placeholder="es. Pianoforte Yamaha C3"></div>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-header"><div class="card-title"><i data-lucide="mic"></i> Microfoni richiesti</div></div>
+    <div class="card-body">
+      <div class="chips" id="micChips"></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-header"><div class="card-title"><i data-lucide="file-text"></i> Note audio</div></div>
+    <div class="card-body">
+      <div class="field"><textarea id="audioNote" oninput="autoSave()" placeholder="Requisiti speciali, patch list, note audio…"></textarea></div>
+    </div>
+  </div>
+</div>
+
+<!-- ── TAB 4: LUCI ── -->
+<div class="panel" id="panel4" data-print-label="Luci">
+  <div class="card">
+    <div class="card-header"><div class="card-title"><i data-lucide="lightbulb"></i> Impianto luci</div></div>
+    <div class="card-body">
+      <div class="grid g2">
+        <div class="field"><label>Console luci</label><input type="text" id="luciConsole" oninput="autoSave()" placeholder="es. GrandMA3 Light"></div>
+        <div class="field"><label>Dimmer / canali DMX</label><input type="text" id="luciDimmer" oninput="autoSave()" placeholder="es. 96 canali DMX"></div>
+        <div class="field span2"><label>Effetti speciali</label><input type="text" id="luciEffetti" oninput="autoSave()" placeholder="es. Hazer, strobo, UV"></div>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-header"><div class="card-title"><i data-lucide="zap"></i> Apparecchi richiesti</div></div>
+    <div class="card-body">
+      <div class="chips" id="projChips"></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-header"><div class="card-title"><i data-lucide="file-text"></i> Note luci</div></div>
+    <div class="card-body">
+      <div class="field"><textarea id="luciNote" oninput="autoSave()" placeholder="Piano luci, richieste speciali, note…"></textarea></div>
+    </div>
+  </div>
+</div>
+
+<!-- ── TAB 5: VIDEO ── -->
+<div class="panel" id="panel5" data-print-label="Video">
+  <div class="card">
+    <div class="card-header"><div class="card-title"><i data-lucide="film"></i> Proiezione / Video</div></div>
+    <div class="card-body">
+      <div class="grid g2">
+        <div class="field"><label>Proiettore</label><input type="text" id="videoProiettore" oninput="autoSave()" placeholder="es. Panasonic PT-RZ21K"></div>
+        <div class="field"><label>Schermo / Superficie</label><input type="text" id="videoSchermo" oninput="autoSave()" placeholder="es. Fondale 8×6m"></div>
+        <div class="field span2"><label>Sorgenti / Playback</label><input type="text" id="videoSorgenti" oninput="autoSave()" placeholder="es. Mac Pro + Resolume Arena"></div>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-header"><div class="card-title"><i data-lucide="file-text"></i> Note video</div></div>
+    <div class="card-body">
+      <div class="field"><textarea id="videoNote" oninput="autoSave()" placeholder="Risoluzione, frame rate, segnali, note video…"></textarea></div>
+    </div>
+  </div>
+</div>
+
+<!-- ── TAB 6: ELETTRICO ── -->
+<div class="panel" id="panel6" data-print-label="Elettrico">
+  <div class="card">
+    <div class="card-header"><div class="card-title"><i data-lucide="zap"></i> Alimentazione elettrica</div></div>
+    <div class="card-body">
+      <div class="grid g2">
+        <div class="field"><label>Potenza richiesta (kW)</label><input type="text" id="potenza" oninput="autoSave()" placeholder="es. 60 kW trifase"></div>
+        <div class="field"><label>Prese / distrib.</label><input type="text" id="prese" oninput="autoSave()" placeholder="es. 32A CEE x4, 16A x8"></div>
+        <div class="field span2"><label>Note elettrico</label><textarea id="elettricoNote" oninput="autoSave()" placeholder="Specifiche alimentazione, gruppi di continuità, note…"></textarea></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── TAB 7: PERSONALE ── -->
+<div class="panel" id="panel7" data-print-label="Personale tecnico">
+  <div class="card">
+    <div class="card-header">
+      <div class="card-title"><i data-lucide="users"></i> Crew tecnica richiesta</div>
+      <button class="btn btn-ghost btn-sm" onclick="addPersRow()">+ Aggiungi ruolo</button>
+    </div>
+    <div class="card-body" style="padding:0">
+      <table class="pers-table">
+        <thead><tr><th>Ruolo</th><th style="width:80px">Qtà</th><th>Orario</th><th style="width:40px"></th></tr></thead>
+        <tbody id="persBody"></tbody>
+      </table>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-header"><div class="card-title"><i data-lucide="user-check"></i> Crew compagnia</div></div>
+    <div class="card-body">
+      <div class="grid g2">
+        <div class="field"><label>Composizione crew</label><input type="text" id="crewComp" oninput="autoSave()" placeholder="es. 2 tecnici + 1 DSM"></div>
+        <div class="field"><label>N° persone totali</label><input type="number" id="numPersone" oninput="autoSave()" placeholder="es. 8" min="0"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── TAB 8: ESIGENZE ── -->
+<div class="panel" id="panel8" data-print-label="Esigenze logistiche">
+  <div class="card">
+    <div class="card-header"><div class="card-title"><i data-lucide="briefcase"></i> Logistica e ospitalità</div></div>
+    <div class="card-body">
+      <div class="grid g2">
+        <div class="field"><label>Camerini richiesti</label><input type="text" id="cameriniRich" oninput="autoSave()" placeholder="es. 2 singoli + 1 collettivo"></div>
+        <div class="field"><label>Catering</label><input type="text" id="catering" oninput="autoSave()" placeholder="es. Pasto caldo per 8 persone"></div>
+        <div class="field"><label>Parcheggio</label><input type="text" id="parcheggio" oninput="autoSave()" placeholder="es. 2 posti riservati + accesso camion"></div>
+        <div class="field"><label>Pernottamento</label><input type="text" id="pernottamento" oninput="autoSave()" placeholder="es. 4 camere singole"></div>
+        <div class="field span2"><label>Note esigenze</label><textarea id="esigenzeNote" oninput="autoSave()" placeholder="Allergie, esigenze speciali, richieste aggiuntive…"></textarea></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── TAB 9: DOCUMENTI ── -->
+<div class="panel" id="panel9" data-print-label="Documenti">
+  <div class="card">
+    <div class="card-header"><div class="card-title"><i data-lucide="file-check-2"></i> Documenti richiesti</div></div>
+    <div class="card-body">
+      <div class="doclist" id="docList"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ── TAB 10: CHECKLIST ── -->
+<div class="panel" id="panel10" data-print-label="Checklist pre-show">
+  <div class="card">
+    <div class="card-header">
+      <div class="card-title"><i data-lucide="list-checks"></i> Checklist pre-show</div>
+      <button class="btn btn-ghost btn-sm" onclick="resetChecklist()">Reset</button>
+    </div>
+    <div class="card-body">
+      <div class="chk-progress-label" id="chkProgressLabel"></div>
+      <div class="chk-progress-bar"><div class="chk-progress-fill" id="chkProgressFill" style="width:0%"></div></div>
+      <div id="checklistContainer"></div>
+      <div class="chk-add-row">
+        <input type="text" id="chkNewItem" placeholder="Nuova voce checklist…" onkeydown="if(event.key==='Enter') addCustomChkItem()">
+        <button class="btn btn-ghost btn-sm" onclick="addCustomChkItem()">+ Aggiungi</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div><!-- /editorContent -->
+
+<!-- TOAST -->
+<div id="toast"></div>
+
+<script>
+// ══════════════════════════════════════════
+//  COSTANTI
+// ══════════════════════════════════════════
+const MIC_OPTIONS = ['Lavalier','Headset','Palmare','Shotgun','DI Box','Strumento','Corale','Coro'];
+const PROJ_OPTIONS = ['Fresnel','PC','PAR LED','Moving Head Wash','Moving Head Beam','Moving Head Spot','Ellipsoidal','Flood','Cyc','Footlight','Barndoor','Followspot'];
+const DOC_LABELS = {
+  schedaRicevuta:'Scheda tecnica ricevuta', pianoLuci:'Piano luci',
+  riderAudio:'Rider audio', stagePlot:'Stage plot',
+  assicurazione:'Assicurazione compagnia', siae:'Documentazione SIAE',
+  cni:'CNI impianti', privacy:'GDPR / Privacy'
+};
+
+const DEFAULT_CHECKLIST = [
+  {id:'c1', cat:'🎭 Palco', label:'Palco pulito e pronto', done:false},
+  {id:'c2', cat:'🎭 Palco', label:'Quinte e fondale montati', done:false},
+  {id:'c3', cat:'🎭 Palco', label:'Praticabili e set montati', done:false},
+  {id:'c4', cat:'🎭 Palco', label:'Pavimento controllato', done:false},
+  {id:'c5', cat:'🔊 Audio', label:'Impianto audio acceso e testato', done:false},
+  {id:'c6', cat:'🔊 Audio', label:'Microfoni controllati e assegnati', done:false},
+  {id:'c7', cat:'🔊 Audio', label:'Monitor e IEM funzionanti', done:false},
+  {id:'c8', cat:'🔊 Audio', label:'Soundcheck completato', done:false},
+  {id:'c9', cat:'💡 Luci', label:'Console luci accesa e patchata', done:false},
+  {id:'c10', cat:'💡 Luci', label:'General check apparecchi', done:false},
+  {id:'c11', cat:'💡 Luci', label:'Focus completato', done:false},
+  {id:'c12', cat:'💡 Luci', label:'Cue list caricata e testata', done:false},
+  {id:'c13', cat:'🎬 Video', label:'Proiettori accesi e allineati', done:false},
+  {id:'c14', cat:'🎬 Video', label:'Contenuti video testati', done:false},
+  {id:'c15', cat:'👥 Personale', label:'Crew tecnica tutta presente', done:false},
+  {id:'c16', cat:'👥 Personale', label:'Artisti in camerino', done:false},
+  {id:'c17', cat:'📋 Admin', label:'Documentazione SIAE consegnata', done:false},
+  {id:'c18', cat:'📋 Admin', label:'Contatti venue verificati', done:false},
+  {id:'c19', cat:'🚀 Show', label:'Prova generale completata', done:false},
+  {id:'c20', cat:'🚀 Show', label:'VIA! — Apertura pubblico', done:false}
+];
+
+const TEMPLATES = {
+  vuota: { nome:'Vuota', desc:'Parti da zero', icon:'file-plus', data:{} },
+  concerto: { nome:'Concerto', desc:'Live music / band', icon:'music',
+    data: { genere:'Musica',
+      audioImpianto:'L-Acoustics KARA', audioMixer:'DiGiCo SD12', audioCanali:'48 in / 24 out',
+      audioMonitor:'6 × d&b M4',
+      mic:['Lavalier','Headset','Palmare','DI Box','Strumento'],
+      proj:['PAR LED','Moving Head Wash','Moving Head Beam','Followspot'],
+      luciConsole:'GrandMA3 Light', luciDimmer:'96 canali DMX',
+      pers:[{ruolo:'Fonico FOH',qta:'1',orario:''},{ruolo:'Fonico monitor',qta:'1',orario:''},
+            {ruolo:'Datore luci',qta:'1',orario:''},{ruolo:'Macchinista',qta:'2',orario:''}] }},
+  teatro: { nome:'Teatro', desc:'Prosa / Drammaturgia', icon:'clapperboard',
+    data: { genere:'Teatro',
+      proj:['Fresnel','PC','PAR LED','Moving Head Spot','Followspot'],
+      luciConsole:'ETC Eos Ti', luciDimmer:'144 canali DMX',
+      mic:['Lavalier','Headset','Shotgun'],
+      pers:[{ruolo:'Macchinista capo',qta:'1',orario:''},{ruolo:'Macchinista',qta:'2',orario:''},
+            {ruolo:'Elettricista',qta:'2',orario:''},{ruolo:'Fonico',qta:'1',orario:''},
+            {ruolo:'DSM',qta:'1',orario:''}] }},
+  danza: { nome:'Danza', desc:'Danza contemporanea / classica', icon:'activity',
+    data: { genere:'Danza',
+      proj:['Fresnel','PC','PAR LED','Moving Head Wash','Cyc','Footlight'],
+      luciConsole:'GrandMA3 Light', luciDimmer:'96 canali DMX',
+      mic:['DI Box'],
+      pers:[{ruolo:'Macchinista',qta:'2',orario:''},{ruolo:'Elettricista',qta:'2',orario:''},
+            {ruolo:'Fonico',qta:'1',orario:''}] }},
+  standup: { nome:'Stand-up', desc:'Comedy / Spoken word', icon:'mic',
+    data: { genere:'Teatro',
+      audioImpianto:'Meyer Sound UPJ', audioMixer:'Yamaha QL5', audioCanali:'16 in / 8 out',
+      mic:['Palmare','Headset','Lavalier'],
+      proj:['Fresnel','Followspot'],
+      luciConsole:'ETC Ion', luciDimmer:'48 canali DMX',
+      pers:[{ruolo:'Fonico',qta:'1',orario:''},{ruolo:'Datore luci',qta:'1',orario:''}] }},
+  opera: { nome:'Opera / Musical', desc:'Lirica e grande teatro musicale', icon:'headphones',
+    data: { genere:'Opera',
+      audioImpianto:'L-Acoustics K2', audioMixer:'SSL L500', audioCanali:'96 in / 48 out',
+      audioMonitor:'8 × monitor palco + IEM orchestra',
+      mic:['Headset','Lavalier','Shotgun','DI Box','Corale'],
+      proj:['Fresnel','PC','Ellipsoidal','Moving Head Spot','Cyc','Followspot','Footlight'],
+      luciConsole:'GrandMA3 full size', luciDimmer:'192 canali DMX',
+      luciEffetti:'Hazer, strobo, UV, mirror ball',
+      pers:[{ruolo:'Macchinista capo',qta:'1',orario:''},{ruolo:'Macchinista',qta:'4',orario:''},
+            {ruolo:'Elettricista capo',qta:'1',orario:''},{ruolo:'Elettricista',qta:'3',orario:''},
+            {ruolo:'Fonico FOH',qta:'1',orario:''},{ruolo:'Fonico monitor',qta:'1',orario:''},
+            {ruolo:'Datore luci',qta:'1',orario:''},{ruolo:'Follow spot',qta:'4',orario:''}] }},
+  multimediale: { nome:'Multimediale', desc:'Video mapping / Installazione', icon:'monitor-play',
+    data: { genere:'Multimediale',
+      videoProiettore:'Panasonic PT-RZ21K 20.000 lm', videoSchermo:'Fondale translucido 10×7m',
+      videoSorgenti:'Mac Pro M2 Ultra + Resolume Arena + backup',
+      audioImpianto:'Meyer Sound LEOPARD', audioMixer:'DiGiCo SD7',
+      proj:['Moving Head Wash','PAR LED'],
+      luciConsole:'GrandMA3',
+      pers:[{ruolo:'VJ / Video operator',qta:'1',orario:''},{ruolo:'Fonico',qta:'1',orario:''},
+            {ruolo:'Datore luci',qta:'1',orario:''},{ruolo:'Macchinista',qta:'2',orario:''}] }}
+};
+
+// ══════════════════════════════════════════
+//  STATE
+// ══════════════════════════════════════════
+let data = {};
+let saveTimer = null;
+let currentTab = 0;
+let currentView = 'library';
+let libraryFilter = '';
+let currentLang  = localStorage.getItem('showriderLang')  || 'it';
+let currentUnits = localStorage.getItem('showriderUnits') || 'm';
+
+// ── UNDO STACK ──
+const undoStack = [];
+const MAX_UNDO = 30;
+
+function pushUndo() {
+  undoStack.push({
+    crono: JSON.parse(JSON.stringify(data.crono || [])),
+    pers:  JSON.parse(JSON.stringify(data.pers  || [])),
+    checklist: JSON.parse(JSON.stringify(data.checklist || []))
+  });
+  if (undoStack.length > MAX_UNDO) undoStack.shift();
+}
+
+function undo() {
+  if (undoStack.length === 0) { toast(t('nothingUndo')); return; }
+  const prev = undoStack.pop();
+  data.crono     = prev.crono;
+  data.pers      = prev.pers;
+  data.checklist = prev.checklist;
+  renderCrono(); renderPers(); renderChecklist();
+  autoSave(); toast(t('undone'));
+}
+
+document.addEventListener('keydown', e => {
+  if ((e.ctrlKey || e.metaKey) && e.key === 'z' && !e.shiftKey) {
+    if (currentView === 'editor') { e.preventDefault(); undo(); }
+  }
+});
+
+// ══════════════════════════════════════════
+//  i18n + UNITS
+// ══════════════════════════════════════════
+const STRINGS = {
+  it: {
+    tab0:'Info', tab1:'Crono', tab2:'Palco', tab3:'Audio', tab4:'Luci',
+    tab5:'Video', tab6:'Elettrico', tab7:'Personale', tab8:'Esigenze',
+    tab9:'Documenti', tab10:'Checklist',
+    libSearch:'Cerca schede…', newShow:'Nuova scheda', backLib:'Libreria',
+    savedLabel:'Salvato', savingLabel:'Salvataggio…',
+    btnOpen:'Apri', btnJSON:'JSON', btnPDF:'PDF',
+    libEmpty1:'Nessuna scheda', libEmpty2:'Crea la tua prima scheda tecnica',
+    libStats: n => n + ' schede',
+    palcoLarg: u => `Larghezza (${u})`, palcoProf: u => `Profondità (${u})`,
+    palcoAlt:  u => `Altezza (${u})`,   graticcia: u => `Graticcia (${u})`,
+    chkProgress:(d,tot,p) => `${d} / ${tot} completati — ${p}%`,
+    chkReset2:'✓ Checklist resettata', newSubtitle:'Nuova scheda',
+    nothingUndo:'⚠️ Niente da annullare', undone:'✓ Annullato',
+    noTel:'⚠️ Nessun numero venue inserito', noEmail:'⚠️ Nessuna email venue inserita',
+    deleted:'Scheda eliminata', duplicated:'✓ Scheda duplicata',
+    confirmDelete: n => `Eliminare "${n}"? L'operazione non può essere annullata.`,
+    newShowToast: n => '✓ Nuova scheda: ' + n,
+    loaded: n => '✓ Scheda caricata: ' + n,
+    jsonDownloaded: n => '✓ JSON scaricato: ' + n,
+    badFile:'⚠️ Errore nel file JSON',
+  },
+  en: {
+    tab0:'Info', tab1:'Schedule', tab2:'Stage', tab3:'Audio', tab4:'Lights',
+    tab5:'Video', tab6:'Power', tab7:'Crew', tab8:'Requirements',
+    tab9:'Documents', tab10:'Checklist',
+    libSearch:'Search shows…', newShow:'New show', backLib:'Library',
+    savedLabel:'Saved', savingLabel:'Saving…',
+    btnOpen:'Open', btnJSON:'JSON', btnPDF:'PDF',
+    libEmpty1:'No shows', libEmpty2:'Create your first technical rider',
+    libStats: n => n + ' shows',
+    palcoLarg: u => `Width (${u})`, palcoProf: u => `Depth (${u})`,
+    palcoAlt:  u => `Height (${u})`, graticcia: u => `Fly tower (${u})`,
+    chkProgress:(d,tot,p) => `${d} / ${tot} completed — ${p}%`,
+    chkReset2:'✓ Checklist reset', newSubtitle:'New show',
+    nothingUndo:'⚠️ Nothing to undo', undone:'✓ Undone',
+    noTel:'⚠️ No venue phone number', noEmail:'⚠️ No venue email',
+    deleted:'Show deleted', duplicated:'✓ Show duplicated',
+    confirmDelete: n => `Delete "${n}"? This cannot be undone.`,
+    newShowToast: n => '✓ New show: ' + n,
+    loaded: n => '✓ Show loaded: ' + n,
+    jsonDownloaded: n => '✓ JSON downloaded: ' + n,
+    badFile:'⚠️ Error reading JSON file',
+  }
+};
+
+function t(key, ...args) {
+  const s = STRINGS[currentLang] || STRINGS.it;
+  const val = (s[key] !== undefined) ? s[key] : (STRINGS.it[key] || key);
+  return typeof val === 'function' ? val(...args) : val;
+}
+
+function applyLang() {
+  document.documentElement.lang = currentLang;
+  const tabEls = document.querySelectorAll('.tabs-wrap .tab');
+  tabEls.forEach((el, i) => {
+    const span = el.querySelector('span.tab-txt');
+    if (span) span.textContent = ' ' + t('tab' + i);
+  });
+  const srch = document.getElementById('headerSearch');
+  if (srch) srch.placeholder = t('libSearch');
+  document.querySelectorAll('[data-t]').forEach(el => {
+    el.textContent = t(el.getAttribute('data-t'));
+  });
+  const u = currentUnits === 'ft' ? 'ft' : 'm';
+  [['palcoLarg','palcoLarg'],['palcoProf','palcoProf'],['palcoAlt','palcoAlt'],['graticcia','graticcia']].forEach(([id,key]) => {
+    const inp = document.getElementById(id);
+    if (inp) { const lbl = inp.closest('.field')?.querySelector('label'); if (lbl) lbl.textContent = t(key, u); }
+  });
+  updateChkProgress();
+  updateLangBtn();
+  updateUnitsBtn();
+}
+
+function toggleLang() {
+  currentLang = (currentLang === 'it') ? 'en' : 'it';
+  localStorage.setItem('showriderLang', currentLang);
+  applyLang();
+}
+
+function toggleUnits() {
+  currentUnits = (currentUnits === 'm') ? 'ft' : 'm';
+  localStorage.setItem('showriderUnits', currentUnits);
+  applyLang();
+}
+
+function updateLangBtn() {
+  document.querySelectorAll('.lang-btn').forEach(btn => {
+    btn.textContent = currentLang === 'it' ? '🇮🇹' : '🇬🇧';
+    btn.title = currentLang === 'it' ? 'Switch to English' : 'Passa all\'italiano';
+  });
+}
+
+function updateUnitsBtn() {
+  document.querySelectorAll('.units-btn').forEach(btn => {
+    btn.textContent = currentUnits === 'm' ? 'm↔ft' : 'ft↔m';
+  });
+}
+
+// ══════════════════════════════════════════
+//  LIBRARY STORAGE
+// ══════════════════════════════════════════
+function loadLibrary() {
+  try { return JSON.parse(localStorage.getItem('showriderLibrary') || '[]'); }
+  catch(e) { return []; }
+}
+function saveLibrary(lib) {
+  localStorage.setItem('showriderLibrary', JSON.stringify(lib));
+}
+function saveCurrentToLibrary() {
+  if (!data.id) return;
+  data.updatedAt = Date.now();
+  const lib = loadLibrary();
+  const idx = lib.findIndex(s => s.id === data.id);
+  if (idx > -1) lib[idx] = JSON.parse(JSON.stringify(data));
+  else lib.unshift(JSON.parse(JSON.stringify(data)));
+  saveLibrary(lib);
+}
+
+function makeDefault(overrides) {
+  return Object.assign({
+    id: genId(), titolo:'', compagnia:'', genere:'Teatro', durata:'', repliche:'',
+    data:'', venue:'', capienza:'', stato:'bozza',
+    venueContNome:'', venueContTel:'', venueContEmail:'',
+    refCompNome:'', refCompTel:'', refCompEmail:'',
+    refTecNome:'', refTecTel:'', refTecEmail:'',
+    palcoLarg:'', palcoProf:'', palcoAlt:'', graticcia:'',
+    pavimento:'', quinte:'', fondale:'', camerini:'', palcoNote:'',
+    audioImpianto:'', audioMixer:'', audioCanali:'', audioMonitor:'', backline:'', audioNote:'',
+    mic:[], proj:[],
+    luciConsole:'', luciDimmer:'', luciEffetti:'', luciNote:'',
+    videoProiettore:'', videoSchermo:'', videoSorgenti:'', videoNote:'',
+    potenza:'', prese:'', elettricoNote:'',
+    crewComp:'', numPersone:'',
+    cameriniRich:'', catering:'', parcheggio:'', pernottamento:'', esigenzeNote:'',
+    noteGenerali:'', docs:{},
+    crono:[], pers:[],
+    checklist: JSON.parse(JSON.stringify(DEFAULT_CHECKLIST)),
+    updatedAt: Date.now()
+  }, overrides || {});
+}
+
+// ══════════════════════════════════════════
+//  INIT
+// ══════════════════════════════════════════
+function init() {
+  const lib = loadLibrary();
+  if (lib.length === 0) {
+    setView('library');
+  } else {
+    const lastId = localStorage.getItem('showriderLastId');
+    const lastShow = lastId ? lib.find(s => s.id === lastId) : null;
+    if (lastShow) {
+      data = JSON.parse(JSON.stringify(lastShow));
+      const def = makeDefault();
+      Object.keys(def).forEach(k => { if (data[k] === undefined) data[k] = def[k]; });
+      setView('editor');
+    } else {
+      setView('library');
+    }
+  }
+}
+
+function genId() { return 's_' + Math.random().toString(36).substr(2,12); }
+
+// ══════════════════════════════════════════
+//  VIEW MANAGEMENT
+// ══════════════════════════════════════════
+function setView(mode) {
+  currentView = mode;
+  const libView = document.getElementById('libraryView');
+  const edTabs  = document.getElementById('editorTabs');
+  const edCont  = document.getElementById('editorContent');
+  const hLibC   = document.getElementById('hLibCenter');
+  const hLibR   = document.getElementById('hLibRight');
+  const hEdC    = document.getElementById('hEdCenter');
+  const hEdR    = document.getElementById('hEdRight');
+
+  if (mode === 'library') {
+    libView.style.display = 'block'; edTabs.style.display = 'none'; edCont.style.display = 'none';
+    hLibC.style.display = 'flex'; hLibR.style.display = 'flex';
+    hEdC.style.display = 'none'; hEdR.style.display = 'none';
+    document.getElementById('headerSub').textContent = t('backLib');
+    if (window.lucide) lucide.createIcons({ nodes: [hLibC, hLibR] });
+    renderLibrary();
+  } else {
+    libView.style.display = 'none'; edTabs.style.display = 'flex'; edCont.style.display = 'block';
+    hLibC.style.display = 'none'; hLibR.style.display = 'none';
+    hEdC.style.display = 'flex'; hEdR.style.display = 'flex';
+    renderAll(); goTab(0);
+    if (window.lucide) lucide.createIcons({ nodes: [hEdC, hEdR, document.getElementById('editorTabs')] });
+  }
+  applyTheme();
+  applyLang();
+}
+
+function backToLibrary() {
+  clearTimeout(saveTimer);
+  saveCurrentToLibrary();
+  setView('library');
+}
+
+// ══════════════════════════════════════════
+//  LIBRARY RENDER
+// ══════════════════════════════════════════
+function renderLibrary() {
+  const lib = loadLibrary();
+  const grid = document.getElementById('libraryGrid');
+  const empty = document.getElementById('libEmpty');
+  const stats = document.getElementById('libStats');
+  const q = libraryFilter.toLowerCase();
+  const filtered = lib.filter(s => !q ||
+    (s.titolo||'').toLowerCase().includes(q) ||
+    (s.compagnia||'').toLowerCase().includes(q) ||
+    (s.venue||'').toLowerCase().includes(q)
+  ).sort((a,b) => (b.updatedAt||0) - (a.updatedAt||0));
+
+  stats.textContent = t('libStats', lib.length);
+
+  if (filtered.length === 0) {
+    grid.innerHTML = ''; empty.style.display = 'block';
+  } else {
+    empty.style.display = 'none'; grid.innerHTML = '';
+    filtered.forEach(show => grid.appendChild(makeLibCard(show)));
+  }
+  if (window.lucide) lucide.createIcons({ nodes: [grid, empty] });
+}
+
+function makeLibCard(show) {
+  const div = document.createElement('div');
+  div.className = 'lib-card';
+  const stato = show.stato || 'bozza';
+  const dataFmt = show.data ? new Date(show.data).toLocaleDateString('it-IT',{day:'2-digit',month:'short',year:'numeric'}) : '—';
+  const updFmt = show.updatedAt ? relTime(show.updatedAt) : '';
+  const title = show.titolo || 'Senza titolo';
+  div.innerHTML = `
+    <div class="lib-card-top" onclick="openShow('${show.id}')">
+      <div class="lib-card-icon"><i data-lucide="clapperboard"></i></div>
+      <div class="lib-card-info">
+        <div class="lib-card-title" title="${esc(title)}">${esc(title)}</div>
+        <div class="lib-card-company">${esc(show.compagnia||'')}</div>
+        <div class="lib-card-meta">
+          <span><i data-lucide="map-pin"></i> ${esc(show.venue||'—')}</span>
+          <span><i data-lucide="calendar"></i> ${dataFmt}</span>
+          ${updFmt ? `<span><i data-lucide="clock"></i> ${updFmt}</span>` : ''}
+        </div>
+      </div>
+    </div>
+    <div class="lib-card-footer">
+      <span class="stato-badge ${stato}">${stato}</span>
+      <div class="lib-card-actions">
+        <button class="btn btn-ghost btn-sm btn-icon" onclick="duplicateShow('${show.id}')" title="Duplica"><i data-lucide="copy"></i></button>
+        <button class="btn btn-danger btn-sm btn-icon" onclick="deleteShow('${show.id}')" title="Elimina"><i data-lucide="trash-2"></i></button>
+        <button class="btn btn-accent btn-sm" onclick="openShow('${show.id}')"><i data-lucide="arrow-right"></i> Apri</button>
+      </div>
+    </div>`;
+  return div;
+}
+
+function openShow(id) {
+  const lib = loadLibrary();
+  const show = lib.find(s => s.id === id);
+  if (!show) return;
+  data = JSON.parse(JSON.stringify(show));
+  const def = makeDefault();
+  Object.keys(def).forEach(k => { if (data[k] === undefined) data[k] = def[k]; });
+  localStorage.setItem('showriderLastId', id);
+  setView('editor');
+}
+
+function deleteShow(id) {
+  const lib = loadLibrary();
+  const show = lib.find(s => s.id === id);
+  const name = show ? (show.titolo || 'questa scheda') : 'questa scheda';
+  if (!confirm(t('confirmDelete', name))) return;
+  saveLibrary(lib.filter(s => s.id !== id));
+  if (data.id === id) { localStorage.removeItem('showriderLastId'); data = {}; }
+  renderLibrary(); toast(t('deleted'));
+}
+
+function duplicateShow(id) {
+  const lib = loadLibrary();
+  const show = lib.find(s => s.id === id);
+  if (!show) return;
+  const clone = JSON.parse(JSON.stringify(show));
+  clone.id = genId();
+  clone.titolo = (clone.titolo || 'Senza titolo') + ' (copia)';
+  clone.stato = 'bozza'; clone.updatedAt = Date.now();
+  lib.unshift(clone); saveLibrary(lib);
+  renderLibrary(); toast(t('duplicated'));
+}
+
+function filterLibrary() {
+  libraryFilter = document.getElementById('headerSearch').value;
+  renderLibrary();
+}
+
+function relTime(ts) {
+  const diff = Date.now() - ts;
+  const m = Math.floor(diff/60000);
+  if (m < 1) return 'adesso';
+  if (m < 60) return m + ' min fa';
+  const h = Math.floor(m/60);
+  if (h < 24) return h + ' h fa';
+  return Math.floor(h/24) + ' g fa';
+}
+
+// ══════════════════════════════════════════
+//  TEMPLATE MODAL
+// ══════════════════════════════════════════
+function showTemplateModal() {
+  const grid = document.getElementById('tmplGrid');
+  grid.innerHTML = '';
+  Object.entries(TEMPLATES).forEach(([key, tmpl]) => {
+    const card = document.createElement('div');
+    card.className = 'tmpl-card';
+    card.innerHTML = `<div><i data-lucide="${tmpl.icon}"></i></div><div class="tmpl-card-name">${tmpl.nome}</div><div class="tmpl-card-desc">${tmpl.desc}</div>`;
+    card.onclick = () => createFromTemplate(key);
+    grid.appendChild(card);
+  });
+  openModal('templateModal');
+  if (window.lucide) lucide.createIcons({ nodes: [grid] });
+}
+
+function createFromTemplate(key) {
+  const tmpl = TEMPLATES[key];
+  if (!tmpl) return;
+  data = makeDefault(tmpl.data);
+  saveCurrentToLibrary();
+  closeModal('templateModal');
+  setView('editor');
+  toast(t('newShowToast', tmpl.nome));
+}
+
+// ══════════════════════════════════════════
+//  QR CODE
+// ══════════════════════════════════════════
+function showQR() {
+  const titolo = data.titolo || 'Senza titolo';
+  const venue = data.venue || '-';
+  const dataShow = data.data ? new Date(data.data).toLocaleDateString('it-IT') : '-';
+  const tel = data.venueContTel || data.refTecTel || '';
+  const email = data.venueContEmail || data.refTecEmail || '';
+  // testo breve: solo i dati essenziali, senza caratteri speciali
+  const qrText = [
+    'ShowRider',
+    titolo,
+    data.compagnia || '',
+    'Venue: ' + venue,
+    'Data: ' + dataShow,
+    tel ? 'Tel: ' + tel : '',
+    email ? 'Email: ' + email : '',
+    'Stato: ' + (data.stato || 'bozza')
+  ].filter(Boolean).join('\n');
+
+  document.getElementById('qrShowTitle').textContent = titolo;
+  document.getElementById('qrInfo').textContent = venue + ' - ' + dataShow;
+
+  // 1. prima apri il modal (rende il div visibile)
+  openModal('qrModal');
+
+  // 2. poi genera il QR dopo che il DOM ha renderizzato il modal
+  const container = document.getElementById('qrCanvas');
+  container.innerHTML = '<p style="color:var(--text-dim);padding:20px;text-align:center">Generazione...</p>';
+
+  setTimeout(function() {
+    container.innerHTML = '';
+    try {
+      new QRCode(container, {
+        text: qrText,
+        width: 240,
+        height: 240,
+        colorDark: '#000000',
+        colorLight: '#ffffff',
+        correctLevel: QRCode.CorrectLevel.L
+      });
+    } catch(e) {
+      container.innerHTML = '<p style="color:var(--text-dim);padding:20px;text-align:center">Errore: ' + e.message + '</p>';
+    }
+  }, 80);
+}
+
+function openModal(id) { document.getElementById(id).classList.add('open'); }
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+document.querySelectorAll('.modal-overlay').forEach(overlay => {
+  overlay.addEventListener('click', e => { if (e.target === overlay) overlay.classList.remove('open'); });
+});
+
+// ══════════════════════════════════════════
+//  RENDER ALL
+// ══════════════════════════════════════════
+function renderAll() {
+  const fields = [
+    'titolo','compagnia','durata','repliche','data','venue','capienza',
+    'venueContNome','venueContTel','venueContEmail',
+    'refCompNome','refCompTel','refCompEmail','refTecNome','refTecTel','refTecEmail',
+    'palcoLarg','palcoAlt','palcoProf','graticcia','pavimento','quinte','fondale','camerini','palcoNote',
+    'audioImpianto','audioMixer','audioCanali','audioMonitor','backline','audioNote',
+    'luciConsole','luciDimmer','luciEffetti','luciNote',
+    'videoProiettore','videoSchermo','videoSorgenti','videoNote',
+    'potenza','prese','elettricoNote',
+    'crewComp','numPersone',
+    'cameriniRich','catering','parcheggio','pernottamento','esigenzeNote','noteGenerali'
+  ];
+  fields.forEach(id => { const el = document.getElementById(id); if (el) el.value = data[id] || ''; });
+  const genEl = document.getElementById('genere');
+  if (genEl) genEl.value = data.genere || 'Teatro';
+  updateStatoSelect();
+  renderCrono(); renderPers();
+  renderChips('micChips', MIC_OPTIONS, data.mic || [], 'mic');
+  renderChips('projChips', PROJ_OPTIONS, data.proj || [], 'proj');
+  renderDocs(); renderChecklist();
+  updateSummary(); updateHeaderSub(); updatePrintCover();
+}
+
+function renderCrono() {
+  const tbody = document.getElementById('cronoBody');
+  tbody.innerHTML = '';
+  (data.crono || []).forEach((row, i) => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td><input class="time-input" type="time" value="${row.ora||''}" onchange="setCrono(${i},'ora',this.value)"></td>
+      <td><input class="att-input" type="text" value="${esc(row.att||'')}" oninput="setCrono(${i},'att',this.value)" placeholder="Attività…"></td>
+      <td><button class="crono-del-btn" onclick="delCrono(${i})" title="Rimuovi">✕</button></td>`;
+    tbody.appendChild(tr);
+  });
+}
+function setCrono(i,k,v){data.crono[i][k]=v;autoSave();}
+function addCronoRow(){data.crono.push({ora:'',att:''});renderCrono();autoSave();}
+function delCrono(i){pushUndo();data.crono.splice(i,1);renderCrono();autoSave();}
+
+function renderPers() {
+  const tbody = document.getElementById('persBody');
+  tbody.innerHTML = '';
+  (data.pers || []).forEach((row, i) => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td><input type="text" value="${esc(row.ruolo||'')}" oninput="setPers(${i},'ruolo',this.value)" placeholder="Ruolo…"></td>
+      <td><input type="number" value="${row.qta||''}" oninput="setPers(${i},'qta',this.value)" placeholder="1" min="0" style="width:70px"></td>
+      <td><input type="text" value="${esc(row.orario||'')}" oninput="setPers(${i},'orario',this.value)" placeholder="es. 09:00–24:00"></td>
+      <td><button class="crono-del-btn" onclick="delPers(${i})" title="Rimuovi">✕</button></td>`;
+    tbody.appendChild(tr);
+  });
+}
+function setPers(i,k,v){data.pers[i][k]=v;autoSave();}
+function addPersRow(){data.pers.push({ruolo:'',qta:'',orario:''});renderPers();autoSave();}
+function delPers(i){pushUndo();data.pers.splice(i,1);renderPers();autoSave();}
+
+function renderChips(cid, options, activeList, dataKey) {
+  const c = document.getElementById(cid);
+  c.innerHTML = '';
+  options.forEach(opt => {
+    const div = document.createElement('div');
+    div.className = 'chip' + (activeList.includes(opt) ? ' on' : '');
+    div.textContent = opt;
+    div.onclick = () => toggleChip(opt, dataKey, cid, options);
+    c.appendChild(div);
+  });
+}
+function toggleChip(opt, dataKey, cid, options) {
+  if (!data[dataKey]) data[dataKey] = [];
+  const idx = data[dataKey].indexOf(opt);
+  if (idx > -1) data[dataKey].splice(idx, 1); else data[dataKey].push(opt);
+  renderChips(cid, options, data[dataKey], dataKey); autoSave();
+}
+
+function renderDocs() {
+  const dl = document.getElementById('docList');
+  dl.innerHTML = '';
+  Object.keys(DOC_LABELS).forEach(key => {
+    const checked = data.docs && data.docs[key];
+    const div = document.createElement('div');
+    div.className = 'doc-item' + (checked ? ' done' : '');
+    div.innerHTML = `<div class="doc-check">${checked ? '✓' : ''}</div><span class="doc-label">${DOC_LABELS[key]}</span>`;
+    div.onclick = () => { if (!data.docs) data.docs = {}; data.docs[key] = !data.docs[key]; renderDocs(); autoSave(); };
+    dl.appendChild(div);
+  });
+}
+
+function renderChecklist() {
+  if (!data.checklist) data.checklist = JSON.parse(JSON.stringify(DEFAULT_CHECKLIST));
+  const container = document.getElementById('checklistContainer');
+  container.innerHTML = '';
+  const cats = [...new Set(data.checklist.map(c => c.cat))];
+  cats.forEach(cat => {
+    const items = data.checklist.filter(c => c.cat === cat);
+    const section = document.createElement('div');
+    section.className = 'chk-category';
+    const titleDiv = document.createElement('div');
+    titleDiv.className = 'chk-cat-title';
+    titleDiv.textContent = cat;
+    section.appendChild(titleDiv);
+    const itemsDiv = document.createElement('div');
+    itemsDiv.className = 'chk-items';
+    items.forEach(item => {
+      const div = document.createElement('div');
+      div.className = 'chk-item' + (item.done ? ' done' : '');
+      div.innerHTML = `<div class="chk-box">${item.done ? '✓' : ''}</div><span class="chk-label">${esc(item.label)}</span><button class="chk-del" onclick="event.stopPropagation();deleteChkItem('${item.id}')" title="Rimuovi">✕</button>`;
+      div.onclick = () => toggleChkItem(item.id);
+      itemsDiv.appendChild(div);
+    });
+    section.appendChild(itemsDiv);
+    container.appendChild(section);
+  });
+  updateChkProgress();
+}
+
+function toggleChkItem(id) {
+  const item = data.checklist.find(c => c.id === id);
+  if (item) { item.done = !item.done; renderChecklist(); autoSave(); }
+}
+function deleteChkItem(id) {
+  pushUndo(); data.checklist = data.checklist.filter(c => c.id !== id);
+  renderChecklist(); autoSave();
+}
+function resetChecklist() {
+  data.checklist.forEach(c => c.done = false);
+  renderChecklist(); autoSave(); toast(t('chkReset2'));
+}
+function addCustomChkItem() {
+  const input = document.getElementById('chkNewItem');
+  const label = input.value.trim();
+  if (!label) return;
+  data.checklist.push({ id: 'c_' + Date.now(), label, cat:'📝 Personalizzati', done:false });
+  input.value = ''; renderChecklist(); autoSave();
+}
+
+function updateChkProgress() {
+  const lbl = document.getElementById('chkProgressLabel');
+  const fill = document.getElementById('chkProgressFill');
+  if (!lbl || !fill) return;
+  if (!data.checklist || !data.checklist.length) { lbl.textContent = ''; fill.style.width = '0%'; return; }
+  const total = data.checklist.length;
+  const done = data.checklist.filter(c => c.done).length;
+  const pct = Math.round((done/total)*100);
+  lbl.textContent = t('chkProgress', done, total, pct);
+  fill.style.width = pct + '%';
+}
+
+function callVenue() {
+  const tel = document.getElementById('venueContTel').value.trim();
+  if (!tel) { toast(t('noTel')); return; }
+  window.open('tel:' + tel);
+}
+function emailVenue() {
+  const email = document.getElementById('venueContEmail').value.trim();
+  const venue = document.getElementById('venue').value.trim();
+  if (!email) { toast(t('noEmail')); return; }
+  const subj = encodeURIComponent('ShowRider — ' + (data.titolo || 'Scheda tecnica') + ' @ ' + venue);
+  window.open('mailto:' + email + '?subject=' + subj);
+}
+
+function updateStatoSelect() {
+  const sel = document.getElementById('statoSelect');
+  if (!sel) return;
+  sel.value = data.stato || 'bozza';
+  sel.className = 'stato-select ' + (data.stato || 'bozza');
+}
+function updateStato() {
+  const sel = document.getElementById('statoSelect');
+  data.stato = sel.value; updateStatoSelect(); autoSave();
+}
+
+function updateSummary() {
+  setText('spVenue', data.venue || '—');
+  if (data.data) {
+    setText('spData', new Date(data.data).toLocaleDateString('it-IT',{day:'2-digit',month:'short',year:'numeric'}));
+  } else setText('spData','—');
+  setText('spRepliche', data.repliche || '—');
+  setText('spCapienza', data.capienza || '—');
+}
+
+function updateHeaderSub() {
+  const sub = document.getElementById('headerSub');
+  if (!sub) return;
+  if (data.titolo && data.compagnia) sub.textContent = data.titolo + ' — ' + data.compagnia;
+  else if (data.titolo) sub.textContent = data.titolo;
+  else if (data.compagnia) sub.textContent = data.compagnia;
+  else sub.textContent = t('newSubtitle');
+}
+
+function updatePrintCover() {
+  const pcShow = document.getElementById('pcShow');
+  if (!pcShow) return;
+  pcShow.textContent = (data.titolo || 'Senza titolo') + (data.compagnia ? ' — ' + data.compagnia : '');
+  document.getElementById('pcVenue').textContent = data.venue || '—';
+  document.getElementById('pcData').textContent = data.data ? new Date(data.data).toLocaleDateString('it-IT') : '—';
+  document.getElementById('pcRepliche').textContent = data.repliche || '1';
+  document.getElementById('pcStato').textContent = (data.stato || 'bozza').toUpperCase();
+}
+
+function autoSave() {
+  const fields = [
+    'titolo','compagnia','durata','repliche','data','venue','capienza',
+    'venueContNome','venueContTel','venueContEmail',
+    'refCompNome','refCompTel','refCompEmail','refTecNome','refTecTel','refTecEmail',
+    'palcoLarg','palcoAlt','palcoProf','graticcia','pavimento','quinte','fondale','camerini','palcoNote',
+    'audioImpianto','audioMixer','audioCanali','audioMonitor','backline','audioNote',
+    'luciConsole','luciDimmer','luciEffetti','luciNote',
+    'videoProiettore','videoSchermo','videoSorgenti','videoNote',
+    'potenza','prese','elettricoNote',
+    'crewComp','numPersone',
+    'cameriniRich','catering','parcheggio','pernottamento','esigenzeNote','noteGenerali'
+  ];
+  fields.forEach(id => { const el = document.getElementById(id); if (el) data[id] = el.value; });
+  const genEl = document.getElementById('genere');
+  if (genEl) data.genere = genEl.value;
+  updateSummary(); updateHeaderSub(); updatePrintCover();
+  const dot = document.getElementById('autosaveDot');
+  const lbl = document.getElementById('autosaveLabel');
+  dot.className = 'autosave-dot saving';
+  lbl.textContent = t('savingLabel');
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(() => {
+    saveCurrentToLibrary();
+    dot.className = 'autosave-dot';
+    lbl.textContent = t('savedLabel');
+  }, 600);
+}
+
+function goTab(n) {
+  document.querySelectorAll('.tab').forEach((t,i) => t.className='tab'+(i===n?' active':''));
+  document.querySelectorAll('.panel').forEach((p,i) => p.className='panel'+(i===n?' active':''));
+  currentTab = n;
+}
+
+function exportJSON() {
+  autoSave();
+  const name = (data.titolo||'scheda') + '_' + (data.data||new Date().toISOString().slice(0,10)) + '.json';
+  const blob = new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob); a.download = name; a.click();
+  toast(t('jsonDownloaded', name));
+}
+
+function loadFile() { document.getElementById('fileInput').click(); }
+
+function handleFile(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = ev => {
+    try {
+      const loaded = JSON.parse(ev.target.result);
+      data = Object.assign(makeDefault(), loaded);
+      if (!data.id) data.id = genId();
+      saveCurrentToLibrary(); renderAll(); goTab(0);
+      toast(t('loaded', data.titolo || file.name));
+    } catch(err) { toast(t('badFile')); }
+  };
+  reader.readAsText(file);
+  e.target.value = '';
+}
+
+function printScheda() { updatePrintCover(); setTimeout(() => window.print(), 100); }
+
+function setText(id, val) { const el=document.getElementById(id); if(el) el.textContent=val; }
+function esc(str) { return String(str).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function focusField(id) {
+  goTab(0);
+  setTimeout(() => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.scrollIntoView({behavior:'smooth',block:'center'});
+    setTimeout(() => { el.focus(); el.select && el.select(); }, 300);
+  }, 50);
+}
+
+function toast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2800);
+}
+
+function setThemeIcon(isLight) {
+  ['themeBtn','themeBtn2'].forEach(id => {
+    const btn = document.getElementById(id);
+    if (!btn) return;
+    btn.innerHTML = isLight ? '<i data-lucide="moon"></i>' : '<i data-lucide="sun"></i>';
+    if (window.lucide) lucide.createIcons({nodes:[btn]});
+  });
+}
+function toggleTheme() {
+  const isLight = document.body.classList.toggle('light');
+  setThemeIcon(isLight);
+  localStorage.setItem('schedaTheme', isLight ? 'light' : 'dark');
+}
+function applyTheme() {
+  const saved = localStorage.getItem('schedaTheme');
+  const isLight = saved === 'light';
+  document.body.classList.toggle('light', isLight);
+  setThemeIcon(isLight);
+}
+
+// ── START ──
+init();
+applyTheme();
+applyLang();
+if (window.lucide) lucide.createIcons();
+</script>
+</body>
+</html>

@@ -1,0 +1,58 @@
+{
+  "name": "showrider",
+  "version": "1.0.0",
+  "description": "ShowRider — Technical Rider per spettacoli dal vivo",
+  "main": "main.js",
+  "author": "Umberto Fiore",
+  "license": "MIT",
+  "scripts": {
+    "start": "electron .",
+    "dist": "electron-builder"
+  },
+  "devDependencies": {
+    "electron": "^31.0.0",
+    "electron-builder": "^24.0.0"
+  },
+  "build": {
+    "appId": "it.umberto.showrider",
+    "productName": "ShowRider",
+    "icon": "assets/icon.png",
+    "files": [
+      "main.js",
+      "index.html",
+      "qrcode.min.js",
+      "assets/**"
+    ],
+    "mac": {
+      "category": "public.app-category.productivity",
+      "icon": "assets/icon.png",
+      "target": [
+        { "target": "dmg", "arch": ["x64", "arm64"] }
+      ],
+      "darkModeSupport": true
+    },
+    "win": {
+      "icon": "assets/icon.ico",
+      "target": [
+        { "target": "nsis", "arch": ["x64"] }
+      ]
+    },
+    "linux": {
+      "icon": "assets/icon.png",
+      "target": ["AppImage"]
+    },
+    "dmg": {
+      "title": "ShowRider",
+      "contents": [
+        { "x": 130, "y": 220 },
+        { "x": 410, "y": 220, "type": "link", "path": "/Applications" }
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "installerIcon": "assets/icon.ico",
+      "uninstallerIcon": "assets/icon.ico"
+    }
+  }
+}
