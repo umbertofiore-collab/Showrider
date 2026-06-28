@@ -983,6 +983,7 @@ function applyLang() {
   });
   updateUnitsBtn();
   if(currentView==="editor")renderChecklist();
+  const srch = document.getElementById('headerSearch');
   if (srch) srch.placeholder = t('libSearch');
   document.querySelectorAll('[data-t]').forEach(el => {
     el.textContent = t(el.getAttribute('data-t'));
