@@ -337,9 +337,9 @@ header button, header select, header input, header a, header .btn {
   <div class="header-center" id="hEdCenter" style="display:none">
     <button class="btn btn-ghost btn-sm" onclick="backToLibrary()"><i data-lucide="arrow-left"></i> <span data-t="backLib">Libreria</span></button>
     <select class="stato-select bozza" id="statoSelect" onchange="updateStato()">
-      <option value="bozza">● Bozza</option>
-      <option value="confermata">● Confermata</option>
-      <option value="archiviata">● Archiviata</option>
+      <option value="bozza" data-t="stBozza">● Bozza</option>
+      <option value="confermata" data-t="stConfermata">● Confermata</option>
+      <option value="archiviata" data-t="stArchiviata">● Archiviata</option>
     </select>
   </div>
   <div class="header-right" id="hEdRight" style="display:none">
@@ -362,20 +362,20 @@ header button, header select, header input, header a, header .btn {
   <div class="lib-grid" id="libraryGrid"></div>
   <div id="libEmpty" class="lib-empty" style="display:none">
     <i data-lucide="folder-open"></i>
-    <div class="lib-empty-title">Nessuna scheda</div>
-    <div class="lib-empty-sub">Crea la tua prima scheda tecnica</div>
-    <button class="btn btn-accent" onclick="showTemplateModal()"><i data-lucide="file-plus"></i> Nuova scheda</button>
+    <div class="lib-empty-title" data-t="libEmpty1">Nessuna scheda</div>
+    <div class="lib-empty-sub" data-t="libEmpty2">Crea la tua prima scheda tecnica</div>
+    <button class="btn btn-accent" onclick="showTemplateModal()"><i data-lucide="file-plus"></i> <span data-t="newShow">Nuova scheda</span></button>
   </div>
 </div>
 
 <!-- ═══ TEMPLATE MODAL ═══ -->
 <div class="modal-overlay" id="templateModal">
   <div class="modal">
-    <div class="modal-title"><i data-lucide="layout-template"></i> Scegli template</div>
-    <div class="modal-sub">Seleziona il tipo di spettacolo per partire con i campi precompilati</div>
+    <div class="modal-title"><i data-lucide="layout-template"></i> <span data-t="tmplModalTitle">Scegli template</span></div>
+    <div class="modal-sub" data-t="tmplModalSub">Seleziona il tipo di spettacolo per partire con i campi precompilati</div>
     <div class="tmpl-grid" id="tmplGrid"></div>
     <div class="modal-footer">
-      <button class="btn btn-ghost" onclick="closeModal('templateModal')">Annulla</button>
+      <button class="btn btn-ghost" onclick="closeModal('templateModal')" data-t="btnAnnulla">Annulla</button>
     </div>
   </div>
 </div>
@@ -383,15 +383,15 @@ header button, header select, header input, header a, header .btn {
 <!-- ═══ QR MODAL ═══ -->
 <div class="modal-overlay" id="qrModal">
   <div class="modal" style="max-width:420px">
-    <div class="modal-title"><i data-lucide="qr-code"></i> QR Code scheda</div>
-    <div class="modal-sub">Inquadra per leggere le info principali della scheda</div>
+    <div class="modal-title"><i data-lucide="qr-code"></i> <span data-t="qrModalTitle">QR Code scheda</span></div>
+    <div class="modal-sub" data-t="qrModalSub">Inquadra per leggere le info principali della scheda</div>
     <div class="qr-container">
       <div class="qr-title" id="qrShowTitle"></div>
       <div id="qrCanvas"></div>
       <div class="qr-info" id="qrInfo"></div>
     </div>
     <div class="modal-footer">
-      <button class="btn btn-ghost" onclick="closeModal('qrModal')">Chiudi</button>
+      <button class="btn btn-ghost" onclick="closeModal('qrModal')" data-t="btnChiudi">Chiudi</button>
     </div>
   </div>
 </div>
@@ -421,10 +421,10 @@ header button, header select, header input, header a, header .btn {
   <div class="print-cover-sub">Technical Rider</div>
   <div class="print-cover-show" id="pcShow"></div>
   <div class="print-cover-meta">
-    <span><strong>Venue:</strong> <span id="pcVenue"></span></span>
-    <span><strong>Data:</strong> <span id="pcData"></span></span>
-    <span><strong>Repliche:</strong> <span id="pcRepliche"></span></span>
-    <span><strong>Stato:</strong> <span id="pcStato"></span></span>
+    <span><strong data-t="pcLabelVenue">Venue:</strong> <span id="pcVenue"></span></span>
+    <span><strong data-t="pcLabelData">Data:</strong> <span id="pcData"></span></span>
+    <span><strong data-t="pcLabelRepliche">Repliche:</strong> <span id="pcRepliche"></span></span>
+    <span><strong data-t="pcLabelStato">Stato:</strong> <span id="pcStato"></span></span>
   </div>
 </div>
 
@@ -514,7 +514,7 @@ header button, header select, header input, header a, header .btn {
     </div>
     <div class="card-body" style="padding:0">
       <table class="crono-table">
-        <thead><tr><th style="width:125px">Orario</th><th>Attività</th><th style="width:40px"></th></tr></thead>
+        <thead><tr><th style="width:125px" data-t="thOrario">Orario</th><th data-t="thAttivita">Attività</th><th style="width:40px"></th></tr></thead>
         <tbody id="cronoBody"></tbody>
       </table>
     </div>
@@ -563,9 +563,16 @@ header button, header select, header input, header a, header .btn {
     </div>
   </div>
   <div class="card">
-    <div class="card-header"><div class="card-title"><i data-lucide="mic"></i> <span data-t="ctMicrofoni">Microfoni richiesti</span></div></div>
-    <div class="card-body">
-      <div class="chips" id="micChips"></div>
+    <div class="card-header">
+      <div class="card-title"><i data-lucide="mic"></i> <span data-t="ctMicrofoni">Microfoni richiesti</span></div>
+      <button class="btn btn-ghost btn-sm" onclick="addMicRow()"><span data-t="btnAddMic">+ Aggiungi</span></button>
+    </div>
+    <div class="card-body" style="padding:0">
+      <table class="pers-table">
+        <thead><tr><th data-t="thStrumento">Strumento / Ruolo</th><th data-t="thTipoMic">Tipo mic</th><th style="width:70px" data-t="thQta">Qtà</th><th data-t="thNote">Note</th><th style="width:40px"></th></tr></thead>
+        <tbody id="micBody"></tbody>
+      </table>
+      <datalist id="micTipoOptions"></datalist>
     </div>
   </div>
   <div class="card">
@@ -589,9 +596,16 @@ header button, header select, header input, header a, header .btn {
     </div>
   </div>
   <div class="card">
-    <div class="card-header"><div class="card-title"><i data-lucide="zap"></i> <span data-t="ctApparecchi">Apparecchi richiesti</span></div></div>
-    <div class="card-body">
-      <div class="chips" id="projChips"></div>
+    <div class="card-header">
+      <div class="card-title"><i data-lucide="zap"></i> <span data-t="ctApparecchi">Apparecchi richiesti</span></div>
+      <button class="btn btn-ghost btn-sm" onclick="addProjRow()"><span data-t="btnAddProj">+ Aggiungi</span></button>
+    </div>
+    <div class="card-body" style="padding:0">
+      <table class="pers-table">
+        <thead><tr><th data-t="thApparecchio">Apparecchio</th><th data-t="thModello">Modello</th><th style="width:70px" data-t="thQta">Qtà</th><th data-t="thNote">Note</th><th style="width:40px"></th></tr></thead>
+        <tbody id="projBody"></tbody>
+      </table>
+      <datalist id="projTipoOptions"></datalist>
     </div>
   </div>
   <div class="card">
@@ -645,7 +659,7 @@ header button, header select, header input, header a, header .btn {
     </div>
     <div class="card-body" style="padding:0">
       <table class="pers-table">
-        <thead><tr><th>Ruolo</th><th style="width:80px">Qtà</th><th>Orario</th><th style="width:40px"></th></tr></thead>
+        <thead><tr><th data-t="thRuolo">Ruolo</th><th style="width:80px" data-t="thQta">Qtà</th><th data-t="thOrario">Orario</th><th style="width:40px"></th></tr></thead>
         <tbody id="persBody"></tbody>
       </table>
     </div>
@@ -654,8 +668,8 @@ header button, header select, header input, header a, header .btn {
     <div class="card-header"><div class="card-title"><i data-lucide="user-check"></i> <span data-t="ctCrewCompagnia">Crew compagnia</span></div></div>
     <div class="card-body">
       <div class="grid g2">
-        <div class="field"><label>Composizione crew</label><input type="text" id="crewComp" oninput="autoSave()"></div>
-        <div class="field"><label>N° persone totali</label><input type="number" id="numPersone" oninput="autoSave()" min="0"></div>
+        <div class="field"><label data-t="lCrewComp">Composizione crew</label><input type="text" id="crewComp" oninput="autoSave()"></div>
+        <div class="field"><label data-t="lNumPersone">N° persone totali</label><input type="number" id="numPersone" oninput="autoSave()" min="0"></div>
       </div>
     </div>
   </div>
@@ -664,7 +678,7 @@ header button, header select, header input, header a, header .btn {
 <!-- ── TAB 8: ESIGENZE ── -->
 <div class="panel" id="panel8" data-print-label="Esigenze logistiche">
   <div class="card">
-    <div class="card-header"><div class="card-title"><i data-lucide="briefcase"></i> Logistica e ospitalità</div></div>
+    <div class="card-header"><div class="card-title"><i data-lucide="briefcase"></i> <span data-t="ctLogistica">Logistica e ospitalità</span></div></div>
     <div class="card-body">
       <div class="grid g2">
         <div class="field"><label data-t="lCameriniRich">Camerini richiesti</label><input type="text" id="cameriniRich" oninput="autoSave()"></div>
@@ -700,7 +714,7 @@ header button, header select, header input, header a, header .btn {
       <div id="checklistContainer"></div>
       <div class="chk-add-row">
         <input type="text" id="chkNewItem" onkeydown="if(event.key==='Enter') addCustomChkItem()">
-        <button class="btn btn-ghost btn-sm" onclick="addCustomChkItem()">+ Aggiungi</button>
+        <button class="btn btn-ghost btn-sm" onclick="addCustomChkItem()" data-t="btnAddChk">+ Aggiungi</button>
       </div>
     </div>
   </div>
@@ -891,7 +905,14 @@ const STRINGS = {
     ctVideo:'Proiezione / Video', ctNoteVideo:'Note video', ctElettrico:'Alimentazione elettrica',
     ctCrewTecnica:'Crew tecnica richiesta', ctCrewCompagnia:'Crew compagnia',
     ctLogistica:'Logistica e ospitalità', ctDocumenti:'Documenti richiesti', ctChecklist:'Checklist pre-show',
+    doc_schedaRicevuta:'Scheda tecnica ricevuta', doc_pianoLuci:'Piano luci',
+    doc_riderAudio:'Rider audio', doc_stagePlot:'Stage plot',
+    doc_assicurazione:'Assicurazione compagnia', doc_siae:'Documentazione SIAE',
+    doc_cni:'CNI impianti', doc_privacy:'GDPR / Privacy',
     btnChiama:'Chiama', btnAddCrono:'+ Aggiungi voce', btnAddRuolo:'+ Aggiungi ruolo',
+    btnAddMic:'+ Aggiungi', btnAddProj:'+ Aggiungi',
+    thStrumento:'Strumento / Ruolo', thTipoMic:'Tipo mic', thApparecchio:'Apparecchio',
+    thModello:'Modello', thNote:'Note',
     spPillRepliche:'Repliche', spPillCapienza:'Capienza',
     chkCat_palco:'Palco', chkCat_audio:'Audio', chkCat_luci:'Luci',
     chkCat_video:'Video', chkCat_personale:'Personale', chkCat_admin:'Admin', chkCat_show:'🚀 Show',
@@ -905,6 +926,27 @@ const STRINGS = {
     chkItem_c15:'Crew tecnica tutta presente', chkItem_c16:'Artisti in camerino',
     chkItem_c17:'Documentazione SIAE consegnata', chkItem_c18:'Contatti venue verificati',
     chkItem_c19:'Prova generale completata', chkItem_c20:'VIA! — Apertura pubblico',
+    tmplModalTitle:'Scegli template', tmplModalSub:'Seleziona il tipo di spettacolo per partire con i campi precompilati',
+    btnAnnulla:'Annulla',
+    tmplName_vuota:'Vuota', tmplDesc_vuota:'Parti da zero',
+    tmplName_concerto:'Concerto', tmplDesc_concerto:'Live music / band',
+    tmplName_teatro:'Teatro', tmplDesc_teatro:'Prosa / Drammaturgia',
+    tmplName_danza:'Danza', tmplDesc_danza:'Danza contemporanea / classica',
+    tmplName_standup:'Stand-up', tmplDesc_standup:'Comedy / Spoken word',
+    tmplName_opera:'Opera / Musical', tmplDesc_opera:'Lirica e grande teatro musicale',
+    tmplName_multimediale:'Multimediale', tmplDesc_multimediale:'Video mapping / Installazione',
+    qrModalTitle:'QR Code scheda', qrModalSub:'Inquadra per leggere le info principali della scheda',
+    btnChiudi:'Chiudi',
+    stBozza:'● Bozza', stConfermata:'● Confermata', stArchiviata:'● Archiviata',
+    pcLabelVenue:'Venue:', pcLabelData:'Data:', pcLabelRepliche:'Repliche:', pcLabelStato:'Stato:',
+    thOrario:'Orario', thAttivita:'Attività', thRuolo:'Ruolo', thQta:'Qtà',
+    btnDuplica:'Duplica', btnElimina:'Elimina', untitled:'Senza titolo',
+    copySuffix:' (copia)', thisShow:'questa scheda',
+    btnAddChk:'+ Aggiungi', btnRimuovi:'Rimuovi',
+    printLabel0:'Informazioni generali', printLabel1:'Cronoprogramma', printLabel2:'Palco',
+    printLabel3:'Audio', printLabel4:'Luci', printLabel5:'Video', printLabel6:'Elettrico',
+    printLabel7:'Personale tecnico', printLabel8:'Esigenze logistiche', printLabel9:'Documenti',
+    printLabel10:'Checklist pre-show',
   },
   en: {
     tab0:'Info', tab1:'Schedule', tab2:'Stage', tab3:'Audio', tab4:'Lights',
@@ -951,7 +993,14 @@ const STRINGS = {
     ctVideo:'Projection / Video', ctNoteVideo:'Video notes', ctElettrico:'Power supply',
     ctCrewTecnica:'Required technical crew', ctCrewCompagnia:'Company crew',
     ctLogistica:'Logistics & hospitality', ctDocumenti:'Required documents', ctChecklist:'Pre-show checklist',
+    doc_schedaRicevuta:'Technical rider received', doc_pianoLuci:'Lighting plot',
+    doc_riderAudio:'Audio rider', doc_stagePlot:'Stage plot',
+    doc_assicurazione:'Company insurance', doc_siae:'Performance rights documentation (SIAE)',
+    doc_cni:'Electrical system compliance certificate', doc_privacy:'GDPR / Privacy',
     btnChiama:'Call', btnAddCrono:'+ Add entry', btnAddRuolo:'+ Add role',
+    btnAddMic:'+ Add', btnAddProj:'+ Add',
+    thStrumento:'Instrument / Role', thTipoMic:'Mic type', thApparecchio:'Fixture',
+    thModello:'Model', thNote:'Notes',
     spPillRepliche:'Shows', spPillCapienza:'Capacity',
     chkCat_palco:'🎭 Stage', chkCat_audio:'Audio', chkCat_luci:'💡 Lights',
     chkCat_video:'Video', chkCat_personale:'👥 Crew', chkCat_admin:'Admin', chkCat_show:'🚀 Show',
@@ -965,6 +1014,27 @@ const STRINGS = {
     chkItem_c15:'Full tech crew on site', chkItem_c16:'Artists in dressing rooms',
     chkItem_c17:'SIAE paperwork delivered', chkItem_c18:'Venue contacts verified',
     chkItem_c19:'General rehearsal done', chkItem_c20:'GO! — Doors open',
+    tmplModalTitle:'Choose template', tmplModalSub:'Select the type of show to start with pre-filled fields',
+    btnAnnulla:'Cancel',
+    tmplName_vuota:'Blank', tmplDesc_vuota:'Start from scratch',
+    tmplName_concerto:'Concert', tmplDesc_concerto:'Live music / band',
+    tmplName_teatro:'Theatre', tmplDesc_teatro:'Drama / Straight play',
+    tmplName_danza:'Dance', tmplDesc_danza:'Contemporary / classical dance',
+    tmplName_standup:'Stand-up', tmplDesc_standup:'Comedy / Spoken word',
+    tmplName_opera:'Opera / Musical', tmplDesc_opera:'Opera and large-scale musical theatre',
+    tmplName_multimediale:'Multimedia', tmplDesc_multimediale:'Video mapping / Installation',
+    qrModalTitle:'QR Code rider', qrModalSub:'Scan to read the rider\'s key info',
+    btnChiudi:'Close',
+    stBozza:'● Draft', stConfermata:'● Confirmed', stArchiviata:'● Archived',
+    pcLabelVenue:'Venue:', pcLabelData:'Date:', pcLabelRepliche:'Shows:', pcLabelStato:'Status:',
+    thOrario:'Time', thAttivita:'Activity', thRuolo:'Role', thQta:'Qty',
+    btnDuplica:'Duplicate', btnElimina:'Delete', untitled:'Untitled',
+    copySuffix:' (copy)', thisShow:'this show',
+    btnAddChk:'+ Add', btnRimuovi:'Remove',
+    printLabel0:'General Information', printLabel1:'Schedule', printLabel2:'Stage',
+    printLabel3:'Audio', printLabel4:'Lighting', printLabel5:'Video', printLabel6:'Power',
+    printLabel7:'Technical Crew', printLabel8:'Logistics Requirements', printLabel9:'Documents',
+    printLabel10:'Pre-show Checklist',
   }
 };
 
@@ -972,6 +1042,12 @@ function t(key, ...args) {
   const s = STRINGS[currentLang] || STRINGS.it;
   const val = (s[key] !== undefined) ? s[key] : (STRINGS.it[key] || key);
   return typeof val === 'function' ? val(...args) : val;
+}
+
+function stLabel(stato) {
+  const s = stato || 'bozza';
+  const key = 'st' + s.charAt(0).toUpperCase() + s.slice(1);
+  return t(key).replace(/^●\s*/, '');
 }
 
 function applyLang() {
@@ -982,11 +1058,16 @@ function applyLang() {
     if (span) span.textContent = ' ' + t('tab' + i);
   });
   updateUnitsBtn();
-  if(currentView==="editor")renderChecklist();
+  if(currentView==="editor"){renderChecklist();renderDocs();}
+  else if(currentView==="library"){renderLibrary();}
   const srch = document.getElementById('headerSearch');
   if (srch) srch.placeholder = t('libSearch');
   document.querySelectorAll('[data-t]').forEach(el => {
     el.textContent = t(el.getAttribute('data-t'));
+  });
+  document.querySelectorAll('.panel[data-print-label]').forEach(el => {
+    const i = el.id.replace('panel', '');
+    el.setAttribute('data-print-label', t('printLabel' + i));
   });
   const u = currentUnits === 'ft' ? 'ft' : 'm';
   [['palcoLarg','palcoLarg'],['palcoProf','palcoProf'],['palcoAlt','palcoAlt'],['graticcia','graticcia']].forEach(([id,key]) => {
@@ -1002,6 +1083,7 @@ function toggleLang() {
   currentLang = (currentLang === 'it') ? 'en' : 'it';
   localStorage.setItem('showriderLang', currentLang);
   applyLang();
+  if (window.electronAPI) window.electronAPI.setLanguage(currentLang);
 }
 
 function toggleUnits() {
@@ -1066,10 +1148,42 @@ function makeDefault(overrides) {
   }, overrides || {});
 }
 
+// mic/proj hanno avuto due formati precedenti: array piatto di categorie (['Lavalier']),
+// poi oggetto {categoria:[modelli]}. Ora sono array di righe libere {tipo,modello,qta,note}.
+// Converte lo show in-place da uno qualsiasi dei formati precedenti. Idempotente.
+function migrateMicProj(s) {
+  ['mic', 'proj'].forEach(key => {
+    const modelsKey = key + 'Models';
+    if (s[modelsKey] && typeof s[modelsKey] === 'object' && !Array.isArray(s[modelsKey])) {
+      const rows = [];
+      Object.entries(s[modelsKey]).forEach(([cat, models]) => {
+        (models || []).forEach(m => rows.push({ tipo: cat, modello: (m === cat ? '' : m), qta: '', note: '' }));
+      });
+      s[key] = rows;
+      delete s[modelsKey];
+    } else if (Array.isArray(s[key]) && s[key].length && typeof s[key][0] === 'string') {
+      s[key] = s[key].map(cat => ({ tipo: cat, modello: '', qta: '', note: '' }));
+    } else if (!Array.isArray(s[key])) {
+      s[key] = [];
+    }
+  });
+  return s;
+}
+
 // ══════════════════════════════════════════
 //  INIT
 // ══════════════════════════════════════════
+function fillDatalist(id, options) {
+  const dl = document.getElementById(id);
+  if (dl && dl.children.length === 0) {
+    dl.innerHTML = options.map(o => `<option value="${esc(o)}">`).join('');
+  }
+}
+
 function init() {
+  if (window.electronAPI) window.electronAPI.setLanguage(currentLang);
+  fillDatalist('micTipoOptions', MIC_OPTIONS);
+  fillDatalist('projTipoOptions', PROJ_OPTIONS);
   const lib = loadLibrary();
   if (lib.length === 0) {
     setView('library');
@@ -1080,6 +1194,7 @@ function init() {
       data = JSON.parse(JSON.stringify(lastShow));
       const def = makeDefault();
       Object.keys(def).forEach(k => { if (data[k] === undefined) data[k] = def[k]; });
+      migrateMicProj(data);
       setView('editor');
     } else {
       setView('library');
@@ -1158,9 +1273,9 @@ function makeLibCard(show) {
   const stato = show.stato || 'bozza';
   const dataFmt = show.data ? new Date(show.data).toLocaleDateString('it-IT',{day:'2-digit',month:'short',year:'numeric'}) : '—';
   const updFmt = show.updatedAt ? relTime(show.updatedAt) : '';
-  const title = show.titolo || 'Senza titolo';
+  const title = show.titolo || t('untitled');
   div.innerHTML = `
-    <div class="lib-card-top" onclick="openShow('${show.id}')">
+    <div class="lib-card-top" onclick="openShow('${esc(show.id)}')">
       <div class="lib-card-icon"><i data-lucide="clapperboard"></i></div>
       <div class="lib-card-info">
         <div class="lib-card-title" title="${esc(title)}">${esc(title)}</div>
@@ -1173,11 +1288,11 @@ function makeLibCard(show) {
       </div>
     </div>
     <div class="lib-card-footer">
-      <span class="stato-badge ${stato}">${stato}</span>
+      <span class="stato-badge ${stato}">${esc(stLabel(stato))}</span>
       <div class="lib-card-actions">
-        <button class="btn btn-ghost btn-sm btn-icon" onclick="duplicateShow('${show.id}')" title="Duplica"><i data-lucide="copy"></i></button>
-        <button class="btn btn-danger btn-sm btn-icon" onclick="deleteShow('${show.id}')" title="Elimina"><i data-lucide="trash-2"></i></button>
-        <button class="btn btn-accent btn-sm" onclick="openShow('${show.id}')"><i data-lucide="arrow-right"></i> Apri</button>
+        <button class="btn btn-ghost btn-sm btn-icon" onclick="duplicateShow('${esc(show.id)}')" title="${esc(t('btnDuplica'))}"><i data-lucide="copy"></i></button>
+        <button class="btn btn-danger btn-sm btn-icon" onclick="deleteShow('${esc(show.id)}')" title="${esc(t('btnElimina'))}"><i data-lucide="trash-2"></i></button>
+        <button class="btn btn-accent btn-sm" onclick="openShow('${esc(show.id)}')"><i data-lucide="arrow-right"></i> ${esc(t('btnOpen'))}</button>
       </div>
     </div>`;
   return div;
@@ -1190,6 +1305,7 @@ function openShow(id) {
   data = JSON.parse(JSON.stringify(show));
   const def = makeDefault();
   Object.keys(def).forEach(k => { if (data[k] === undefined) data[k] = def[k]; });
+  migrateMicProj(data);
   localStorage.setItem('showriderLastId', id);
   setView('editor');
 }
@@ -1197,7 +1313,7 @@ function openShow(id) {
 function deleteShow(id) {
   const lib = loadLibrary();
   const show = lib.find(s => s.id === id);
-  const name = show ? (show.titolo || 'questa scheda') : 'questa scheda';
+  const name = (show && show.titolo) || t('thisShow');
   if (!confirm(t('confirmDelete', name))) return;
   saveLibrary(lib.filter(s => s.id !== id));
   if (data.id === id) { localStorage.removeItem('showriderLastId'); data = {}; }
@@ -1210,7 +1326,7 @@ function duplicateShow(id) {
   if (!show) return;
   const clone = JSON.parse(JSON.stringify(show));
   clone.id = genId();
-  clone.titolo = (clone.titolo || 'Senza titolo') + ' (copia)';
+  clone.titolo = (clone.titolo || t('untitled')) + t('copySuffix');
   clone.stato = 'bozza'; clone.updatedAt = Date.now();
   lib.unshift(clone); saveLibrary(lib);
   renderLibrary(); toast(t('duplicated'));
@@ -1240,7 +1356,7 @@ function showTemplateModal() {
   Object.entries(TEMPLATES).forEach(([key, tmpl]) => {
     const card = document.createElement('div');
     card.className = 'tmpl-card';
-    card.innerHTML = `<div><i data-lucide="${tmpl.icon}"></i></div><div class="tmpl-card-name">${tmpl.nome}</div><div class="tmpl-card-desc">${tmpl.desc}</div>`;
+    card.innerHTML = `<div><i data-lucide="${tmpl.icon}"></i></div><div class="tmpl-card-name">${esc(t('tmplName_' + key))}</div><div class="tmpl-card-desc">${esc(t('tmplDesc_' + key))}</div>`;
     card.onclick = () => createFromTemplate(key);
     grid.appendChild(card);
   });
@@ -1252,6 +1368,7 @@ function createFromTemplate(key) {
   const tmpl = TEMPLATES[key];
   if (!tmpl) return;
   data = makeDefault(tmpl.data);
+  migrateMicProj(data);
   saveCurrentToLibrary();
   closeModal('templateModal');
   setView('editor');
@@ -1262,26 +1379,33 @@ function createFromTemplate(key) {
 //  QR CODE
 // ══════════════════════════════════════════
 function showQR() {
-  const titolo = data.titolo || 'Senza titolo';
+  const titolo = data.titolo || t('untitled');
   const venue = data.venue || '-';
   const dataShow = data.data ? new Date(data.data).toLocaleDateString('it-IT') : '-';
-  const tel = data.venueContTel || data.refTecTel || '';
-  const email = data.venueContEmail || data.refTecEmail || '';
-  // testo breve: solo i dati essenziali, senza caratteri speciali
-  // vCard — viene riconosciuta come contatto da tutti gli scanner QR
   const refNome = data.refTecNome || data.venueContNome || '';
-  const note = ['ShowRider', titolo, data.compagnia || '', venue ? 'Venue: '+venue : '', dataShow ? 'Data: '+dataShow : ''].filter(Boolean).join(' | ');
+  const tel = data.refTecTel || data.venueContTel || '';
+  const email = data.refTecEmail || data.venueContEmail || '';
+  // testo semplice, non vCard: uno scanner QR lo mostra come nota leggibile,
+  // non lo importa come contatto in rubrica
+  const dims = [data.palcoLarg, data.palcoProf, data.palcoAlt].filter(Boolean).join(' x ');
+  const audio = [data.audioImpianto, data.audioMixer].filter(Boolean).join(' / ');
+  const luci = [data.luciConsole, data.luciDimmer].filter(Boolean).join(' / ');
+  const referente = [refNome, tel, email].filter(Boolean).join(' - ');
   const qrText = [
-    'BEGIN:VCARD',
-    'VERSION:3.0',
-    'FN:' + (titolo || 'ShowRider'),
-    refNome ? 'N:' + refNome + ';;;' : '',
-    data.compagnia ? 'ORG:' + data.compagnia : '',
-    tel ? 'TEL;TYPE=WORK,VOICE:' + tel : '',
-    email ? 'EMAIL;TYPE=WORK:' + email : '',
-    'NOTE:' + note,
-    'END:VCARD'
-  ].filter(Boolean).join('\n');
+    'SCHEDA TECNICA - ' + titolo,
+    data.compagnia || '',
+    'Venue: ' + venue,
+    'Data: ' + dataShow,
+    dims ? 'Palco (m): ' + dims : '',
+    audio ? 'Audio: ' + audio : '',
+    luci ? 'Luci: ' + luci : '',
+    referente ? 'Referente tecnico: ' + referente : ''
+  ].filter(Boolean).join('\n')
+    // qrcode.min.js (libreria vendored) calcola male la versione QR necessaria in presenza
+    // di caratteri multi-byte oltre una certa lunghezza e va in overflow: testo accentato
+    // italiano comune (città, però...) basta a farlo fallire. Si normalizzano gli accenti
+    // sul solo testo destinato al QR, i dati salvati restano invariati.
+    .normalize('NFD').replace(/[\u0300-\u036f]/g, '');
 
   document.getElementById('qrShowTitle').textContent = titolo;
   document.getElementById('qrInfo').textContent = venue + ' - ' + dataShow;
@@ -1337,8 +1461,8 @@ function renderAll() {
   if (genEl) genEl.value = data.genere || 'Teatro';
   updateStatoSelect();
   renderCrono(); renderPers();
-  renderChips('micChips', MIC_OPTIONS, data.mic || [], 'mic');
-  renderChips('projChips', PROJ_OPTIONS, data.proj || [], 'proj');
+  renderMic();
+  renderProj();
   renderDocs(); renderChecklist();
   updateSummary(); updateHeaderSub(); updatePrintCover();
 }
@@ -1349,9 +1473,9 @@ function renderCrono() {
   (data.crono || []).forEach((row, i) => {
     const tr = document.createElement('tr');
     tr.innerHTML = `
-      <td><input class="time-input" type="time" value="${row.ora||''}" onchange="setCrono(${i},'ora',this.value)"></td>
+      <td><input class="time-input" type="time" value="${esc(row.ora||'')}" onchange="setCrono(${i},'ora',this.value)"></td>
       <td><input class="att-input" type="text" value="${esc(row.att||'')}" oninput="setCrono(${i},'att',this.value)"></td>
-      <td><button class="crono-del-btn" onclick="delCrono(${i})" title="Rimuovi">✕</button></td>`;
+      <td><button class="crono-del-btn" onclick="delCrono(${i})" title="${esc(t('btnRimuovi'))}">✕</button></td>`;
     tbody.appendChild(tr);
   });
 }
@@ -1366,9 +1490,9 @@ function renderPers() {
     const tr = document.createElement('tr');
     tr.innerHTML = `
       <td><input type="text" value="${esc(row.ruolo||'')}" oninput="setPers(${i},'ruolo',this.value)"></td>
-      <td><input type="number" value="${row.qta||''}" oninput="setPers(${i},'qta',this.value)" min="0" style="width:70px"></td>
+      <td><input type="number" value="${esc(row.qta||'')}" oninput="setPers(${i},'qta',this.value)" min="0" style="width:70px"></td>
       <td><input type="text" value="${esc(row.orario||'')}" oninput="setPers(${i},'orario',this.value)"></td>
-      <td><button class="crono-del-btn" onclick="delPers(${i})" title="Rimuovi">✕</button></td>`;
+      <td><button class="crono-del-btn" onclick="delPers(${i})" title="${esc(t('btnRimuovi'))}">✕</button></td>`;
     tbody.appendChild(tr);
   });
 }
@@ -1376,23 +1500,41 @@ function setPers(i,k,v){data.pers[i][k]=v;autoSave();}
 function addPersRow(){data.pers.push({ruolo:'',qta:'',orario:''});renderPers();autoSave();}
 function delPers(i){pushUndo();data.pers.splice(i,1);renderPers();autoSave();}
 
-function renderChips(cid, options, activeList, dataKey) {
-  const c = document.getElementById(cid);
-  c.innerHTML = '';
-  options.forEach(opt => {
-    const div = document.createElement('div');
-    div.className = 'chip' + (activeList.includes(opt) ? ' on' : '');
-    div.textContent = opt;
-    div.onclick = () => toggleChip(opt, dataKey, cid, options);
-    c.appendChild(div);
+function renderMic() {
+  const tbody = document.getElementById('micBody');
+  tbody.innerHTML = '';
+  (data.mic || []).forEach((row, i) => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td><input type="text" list="micTipoOptions" value="${esc(row.tipo||'')}" oninput="setMic(${i},'tipo',this.value)"></td>
+      <td><input type="text" value="${esc(row.modello||'')}" oninput="setMic(${i},'modello',this.value)"></td>
+      <td><input type="number" value="${esc(row.qta||'')}" oninput="setMic(${i},'qta',this.value)" min="0" style="width:70px"></td>
+      <td><input type="text" value="${esc(row.note||'')}" oninput="setMic(${i},'note',this.value)"></td>
+      <td><button class="crono-del-btn" onclick="delMic(${i})" title="${esc(t('btnRimuovi'))}">✕</button></td>`;
+    tbody.appendChild(tr);
   });
 }
-function toggleChip(opt, dataKey, cid, options) {
-  if (!data[dataKey]) data[dataKey] = [];
-  const idx = data[dataKey].indexOf(opt);
-  if (idx > -1) data[dataKey].splice(idx, 1); else data[dataKey].push(opt);
-  renderChips(cid, options, data[dataKey], dataKey); autoSave();
+function setMic(i,k,v){data.mic[i][k]=v;autoSave();}
+function addMicRow(){data.mic.push({tipo:'',modello:'',qta:'',note:''});renderMic();autoSave();}
+function delMic(i){pushUndo();data.mic.splice(i,1);renderMic();autoSave();}
+
+function renderProj() {
+  const tbody = document.getElementById('projBody');
+  tbody.innerHTML = '';
+  (data.proj || []).forEach((row, i) => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td><input type="text" list="projTipoOptions" value="${esc(row.tipo||'')}" oninput="setProj(${i},'tipo',this.value)"></td>
+      <td><input type="text" value="${esc(row.modello||'')}" oninput="setProj(${i},'modello',this.value)"></td>
+      <td><input type="number" value="${esc(row.qta||'')}" oninput="setProj(${i},'qta',this.value)" min="0" style="width:70px"></td>
+      <td><input type="text" value="${esc(row.note||'')}" oninput="setProj(${i},'note',this.value)"></td>
+      <td><button class="crono-del-btn" onclick="delProj(${i})" title="${esc(t('btnRimuovi'))}">✕</button></td>`;
+    tbody.appendChild(tr);
+  });
 }
+function setProj(i,k,v){data.proj[i][k]=v;autoSave();}
+function addProjRow(){data.proj.push({tipo:'',modello:'',qta:'',note:''});renderProj();autoSave();}
+function delProj(i){pushUndo();data.proj.splice(i,1);renderProj();autoSave();}
 
 function renderDocs() {
   const dl = document.getElementById('docList');
@@ -1401,7 +1543,9 @@ function renderDocs() {
     const checked = data.docs && data.docs[key];
     const div = document.createElement('div');
     div.className = 'doc-item' + (checked ? ' done' : '');
-    div.innerHTML = `<div class="doc-check">${checked ? '✓' : ''}</div><span class="doc-label">${DOC_LABELS[key]}</span>`;
+    const s = STRINGS[currentLang] || STRINGS.it;
+    const label = s['doc_' + key] !== undefined ? s['doc_' + key] : DOC_LABELS[key];
+    div.innerHTML = `<div class="doc-check">${checked ? '✓' : ''}</div><span class="doc-label">${esc(label)}</span>`;
     div.onclick = () => { if (!data.docs) data.docs = {}; data.docs[key] = !data.docs[key]; renderDocs(); autoSave(); };
     dl.appendChild(div);
   });
@@ -1425,7 +1569,7 @@ function renderChecklist() {
     items.forEach(item => {
       const div = document.createElement('div');
       div.className = 'chk-item' + (item.done ? ' done' : '');
-      div.innerHTML = `<div class="chk-box">${item.done ? '✓' : ''}</div><span class="chk-label">${esc((()=>{const k='chkItem_'+item.id;const s=STRINGS[currentLang]||STRINGS.it;return s[k]!==undefined?s[k]:item.label;})())}</span><button class="chk-del" onclick="event.stopPropagation();deleteChkItem('${item.id}')" title="Rimuovi">✕</button>`;
+      div.innerHTML = `<div class="chk-box">${item.done ? '✓' : ''}</div><span class="chk-label">${esc((()=>{const k='chkItem_'+item.id;const s=STRINGS[currentLang]||STRINGS.it;return s[k]!==undefined?s[k]:item.label;})())}</span><button class="chk-del" onclick="event.stopPropagation();deleteChkItem('${esc(item.id)}')" title="${esc(t('btnRimuovi'))}">✕</button>`;
       div.querySelector('.chk-box').onclick = (e) => { e.stopPropagation(); toggleChkItem(item.id); };
       itemsDiv.appendChild(div);
     });
@@ -1513,11 +1657,11 @@ function updateHeaderSub() {
 function updatePrintCover() {
   const pcShow = document.getElementById('pcShow');
   if (!pcShow) return;
-  pcShow.textContent = (data.titolo || 'Senza titolo') + (data.compagnia ? ' — ' + data.compagnia : '');
+  pcShow.textContent = (data.titolo || t('untitled')) + (data.compagnia ? ' — ' + data.compagnia : '');
   document.getElementById('pcVenue').textContent = data.venue || '—';
   document.getElementById('pcData').textContent = data.data ? new Date(data.data).toLocaleDateString('it-IT') : '—';
   document.getElementById('pcRepliche').textContent = data.repliche || '1';
-  document.getElementById('pcStato').textContent = (data.stato || 'bozza').toUpperCase();
+  document.getElementById('pcStato').textContent = stLabel(data.stato).toUpperCase();
 }
 
 function autoSave() {
@@ -1573,7 +1717,10 @@ function handleFile(e) {
   reader.onload = ev => {
     try {
       const loaded = JSON.parse(ev.target.result);
+      if (typeof loaded !== 'object' || loaded === null || Array.isArray(loaded)) throw new Error('shape');
+      ['crono','pers','checklist'].forEach(k => { if (!Array.isArray(loaded[k])) delete loaded[k]; });
       data = Object.assign(makeDefault(), loaded);
+      migrateMicProj(data);
       if (!data.id) data.id = genId();
       saveCurrentToLibrary(); renderAll(); goTab(0);
       toast(t('loaded', data.titolo || file.name));

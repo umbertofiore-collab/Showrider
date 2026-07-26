@@ -19,6 +19,7 @@
     "icon": "assets/icon.png",
     "files": [
       "main.js",
+      "preload.js",
       "index.html",
       "qrcode.min.js",
       "assets/**"
