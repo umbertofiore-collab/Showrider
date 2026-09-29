@@ -1,5 +1,13 @@
-const { app, BrowserWindow, Menu, shell, ipcMain } = require('electron')
+const { app, BrowserWindow, Menu, shell, ipcMain, dialog } = require('electron')
 const path = require('path')
+const fs = require('fs')
+const crypto = require('crypto')
+
+function attachmentsDir(showId) {
+  const dir = path.join(app.getPath('userData'), 'attachments', showId)
+  fs.mkdirSync(dir, { recursive: true })
+  return dir
+}
 
 const MENU_STRINGS = {
   it: {
@@ -104,6 +112,54 @@ function createWindow() {
 
 ipcMain.on('set-language', (_event, lang) => {
   Menu.setApplicationMenu(Menu.buildFromTemplate(buildMenuTemplate(lang)))
+})
+
+ipcMain.handle('attach-doc-file', async (event, showId) => {
+  const win = BrowserWindow.fromWebContents(event.sender)
+  const result = await dialog.showOpenDialog(win, { properties: ['openFile', 'multiSelections'] })
+  if (result.canceled) return []
+  const dir = attachmentsDir(showId)
+  return result.filePaths.map(srcPath => {
+    const originalName = path.basename(srcPath)
+    const ext = path.extname(originalName)
+    const stored = crypto.randomUUID() + ext
+    fs.copyFileSync(srcPath, path.join(dir, stored))
+    const stat = fs.statSync(srcPath)
+    return { name: originalName, stored, size: stat.size }
+  })
+})
+
+ipcMain.handle('open-attachment', (_event, showId, stored) => {
+  const filePath = path.join(attachmentsDir(showId), stored)
+  return shell.openPath(filePath)
+})
+
+ipcMain.handle('remove-attachment', (_event, showId, stored) => {
+  const filePath = path.join(attachmentsDir(showId), stored)
+  try { fs.unlinkSync(filePath) } catch (e) { /* already gone, nothing to do */ }
+  return true
+})
+
+ipcMain.handle('export-attachments-base64', (_event, showId, fileRefs) => {
+  const dir = attachmentsDir(showId)
+  return fileRefs.map(ref => {
+    try {
+      const data = fs.readFileSync(path.join(dir, ref.stored))
+      return { name: ref.name, stored: ref.stored, size: ref.size, base64: data.toString('base64') }
+    } catch (e) {
+      return { name: ref.name, stored: ref.stored, size: ref.size, base64: null }
+    }
+  })
+})
+
+ipcMain.handle('import-attachments-base64', (_event, showId, attachments) => {
+  const dir = attachmentsDir(showId)
+  return attachments.map(att => {
+    const ext = path.extname(att.name)
+    const stored = crypto.randomUUID() + ext
+    if (att.base64) fs.writeFileSync(path.join(dir, stored), Buffer.from(att.base64, 'base64'))
+    return { name: att.name, stored, size: att.size }
+  })
 })
 
 app.whenReady().then(() => {
