@@ -1,0 +1,21 @@
+{
+  "name": "ShowRider",
+  "short_name": "ShowRider",
+  "description": "Scheda tecnica digitale per spettacoli teatrali",
+  "start_url": "/Showrider/",
+  "scope": "/Showrider/",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#1a1a2e",
+  "theme_color": "#f5a623",
+  "lang": "it",
+  "icons": [
+    { "src": "assets/icon_32.png",   "sizes": "32x32",     "type": "image/png" },
+    { "src": "assets/icon_48.png",   "sizes": "48x48",     "type": "image/png" },
+    { "src": "assets/icon_64.png",   "sizes": "64x64",     "type": "image/png" },
+    { "src": "assets/icon_128.png",  "sizes": "128x128",   "type": "image/png" },
+    { "src": "assets/icon_256.png",  "sizes": "256x256",   "type": "image/png" },
+    { "src": "assets/icon_512.png",  "sizes": "512x512",   "type": "image/png", "purpose": "any maskable" },
+    { "src": "assets/icon_1024.png", "sizes": "1024x1024", "type": "image/png" }
+  ]
+}
